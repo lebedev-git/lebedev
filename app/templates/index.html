@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% set active = 'home' %}
+
+{% block content %}
+<header class="hero wrap">
+  <div class="hero-grid">
+    <div class="hero-main">
+      <div class="eyebrow reveal"><span class="dot"></span> Открыт к проектам · {{ owner.city }}</div>
+      <h1 class="reveal">Андрей<br>Лебедев</h1>
+      <p class="role reveal"><b>AI Automation Engineer</b> и руководитель проектов. Превращаю идеи и рутину в работающие системы на базе искусственного интеллекта.</p>
+      <div class="meta reveal">
+        <span class="chip">n8n</span>
+        <span class="chip">Telegram-боты</span>
+        <span class="chip">LLM · OpenAI / Claude</span>
+        <span class="chip">Docker</span>
+      </div>
+      <div class="hero-cta reveal">
+        <a class="btn btn-primary" href="/projects">Смотреть проекты</a>
+        <a class="btn btn-ghost" href="{{ owner.telegram_url }}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
+      </div>
+    </div>
+    <div class="hero-side reveal">
+      {% for s in stats %}
+      <div class="stat{% if loop.first %} wide{% endif %}"><div class="num">{{ s.num }}</div><div class="cap">{{ s.cap }}</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</header>
+
+<!-- Избранные проекты -->
+<section class="wrap">
+  <div class="section-head reveal">
+    <div><div class="label">Избранное</div><h2>Проекты</h2></div>
+    <a class="muted-link" href="/projects">Все проекты →</a>
+  </div>
+  {% if featured %}
+  <div class="pcards">
+    {% for p in featured %}
+    <a class="pcard reveal" href="/projects/{{ p.slug }}">
+      <div class="cover">
+        {% if p.cover_image %}<img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" />{% else %}<span class="ph">{{ p.title[0]|upper }}</span>{% endif %}
+      </div>
+      <div class="body">
+        <h3>{{ p.title }}</h3>
+        <p class="summary">{{ p.summary }}</p>
+        <div class="tags">
+          {% for t in p.tags.split(',') if t.strip() %}<span class="tag">{{ t.strip() }}</span>{% endfor %}
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">Проекты скоро появятся.</p>
+  {% endif %}
+</section>
+
+<!-- Навыки кратко -->
+<section class="wrap">
+  <div class="label reveal">Компетенции</div>
+  <h2 class="reveal">Чем владею</h2>
+  <div class="skills">
+    {% for sk in skills %}
+    <div class="skillcard reveal">
+      <h4>{{ sk.group }}</h4>
+      <div class="items">{% for i in sk['items'] %}<span class="chip">{{ i }}</span>{% endfor %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Контакты -->
+<section class="contact wrap">
+  <div class="label reveal" style="text-align:center">Контакты</div>
+  <h2 class="reveal">Давайте поговорим</h2>
+  <p class="reveal">Открыт к интересным проектам и задачам. Пишите — обсудим, чем могу быть полезен.</p>
+  <a class="btn btn-primary reveal" href="{{ owner.telegram_url }}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
+  <div class="links reveal">
+    <a href="tel:{{ owner.phone_href }}">{{ owner.phone }}</a>
+    <a href="{{ owner.telegram_url }}" target="_blank" rel="noopener">@{{ owner.telegram }}</a>
+  </div>
+</section>
+{% endblock %}

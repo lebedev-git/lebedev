@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Править проект' if p else 'Новый проект' }} — Админка{% endblock %}
+{% block content %}
+<div class="wrap admin-shell">
+  <div class="admin-head">
+    <h1>{{ 'Править проект' if p else 'Новый проект' }}</h1>
+    <a class="btn btn-ghost btn-sm" href="/admin">← Назад</a>
+  </div>
+
+  <form class="form" method="post" action="{{ action }}" enctype="multipart/form-data">
+    <div class="field">
+      <label>Название *</label>
+      <input type="text" name="title" required value="{{ p.title if p else '' }}" />
+    </div>
+    <div class="field">
+      <label>Краткое описание (для карточки)</label>
+      <input type="text" name="summary" value="{{ p.summary if p else '' }}" />
+    </div>
+    <div class="field">
+      <label>Полное описание</label>
+      <textarea name="description">{{ p.description if p else '' }}</textarea>
+      <div class="hint">Абзацы разделяй пустой строкой (Enter).</div>
+    </div>
+    <div class="field">
+      <label>Теги (через запятую)</label>
+      <input type="text" name="tags" value="{{ p.tags if p else '' }}" placeholder="AI, n8n, Python" />
+    </div>
+    <div class="field">
+      <label>Роль</label>
+      <input type="text" name="role" value="{{ p.role if p else '' }}" placeholder="Автор / Разработчик" />
+    </div>
+    <div class="field">
+      <label>Период / год</label>
+      <input type="text" name="year" value="{{ p.year if p else '' }}" placeholder="2026" />
+    </div>
+    <div class="field">
+      <label>Ссылка на проект</label>
+      <input type="text" name="link" value="{{ p.link if p else '' }}" placeholder="https://..." />
+    </div>
+    <div class="field">
+      <label>Обложка (изображение)</label>
+      <input type="file" name="cover" accept="image/*" />
+      {% if p and p.cover_image %}
+      <img class="cover-preview" src="/static/uploads/{{ p.cover_image }}" alt="" />
+      <div class="hint">Загрузишь новый файл — заменит текущий.</div>
+      {% endif %}
+    </div>
+    <div class="field">
+      <label>Порядок сортировки (меньше — выше)</label>
+      <input type="number" name="sort_order" value="{{ p.sort_order if p else 0 }}" />
+    </div>
+    <div class="field check">
+      <input type="checkbox" id="featured" name="featured" value="1" {{ 'checked' if p and p.featured }} />
+      <label for="featured" style="margin:0">Показывать в избранном на главной</label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Сохранить</button>
+      <a class="btn btn-ghost" href="/admin">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

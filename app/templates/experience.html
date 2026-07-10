@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% set active = 'experience' %}
+{% block title %}Опыт и навыки — {{ owner.name }}{% endblock %}
+
+{% block content %}
+<section class="wrap" style="padding-top:56px">
+  <div class="label reveal">Мой путь</div>
+  <h2 class="reveal">Опыт работы</h2>
+  <div class="timeline">
+    {% for e in experience %}
+    <div class="tl reveal">
+      <div class="when">{{ e.when }}</div>
+      <h3>{{ e.title }}</h3>
+      <div class="org">{{ e.org }}</div>
+      <ul>{% for pt in e.points %}<li>{{ pt }}</li>{% endfor %}</ul>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="label reveal">Достижения</div>
+  <div class="stats">
+    {% for s in stats %}
+    <div class="stat reveal"><div class="num">{{ s.num }}</div><div class="cap">{{ s.cap }}</div></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="label reveal">Компетенции</div>
+  <h2 class="reveal">Навыки и инструменты</h2>
+  <div class="skills">
+    {% for sk in skills %}
+    <div class="skillcard reveal">
+      <h4>{{ sk.group }}</h4>
+      <div class="items">{% for i in sk['items'] %}<span class="chip">{{ i }}</span>{% endfor %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

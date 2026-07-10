@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% set active = 'blog' %}
+{% block title %}{{ post.title }} — {{ owner.name }}{% endblock %}
+{% block description %}{{ post.excerpt }}{% endblock %}
+
+{% block content %}
+<section class="wrap detail-hero">
+  <a class="back" href="/blog">← Все записи</a>
+  <h1>{{ post.title }}</h1>
+  <div class="info-row"><span>{{ post.created_at[:10] }}</span></div>
+
+  {% if post.cover_image %}
+  <div class="detail-cover"><img src="/static/uploads/{{ post.cover_image }}" alt="{{ post.title }}" /></div>
+  {% endif %}
+
+  <div class="prose" style="margin-top:24px">
+    {% for para in post.body.split('\n') if para.strip() %}
+    <p>{{ para.strip() }}</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

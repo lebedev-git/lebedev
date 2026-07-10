@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Править запись' if post else 'Новая запись' }} — Админка{% endblock %}
+{% block content %}
+<div class="wrap admin-shell">
+  <div class="admin-head">
+    <h1>{{ 'Править запись' if post else 'Новая запись' }}</h1>
+    <a class="btn btn-ghost btn-sm" href="/admin">← Назад</a>
+  </div>
+
+  <form class="form" method="post" action="{{ action }}" enctype="multipart/form-data">
+    <div class="field">
+      <label>Заголовок *</label>
+      <input type="text" name="title" required value="{{ post.title if post else '' }}" />
+    </div>
+    <div class="field">
+      <label>Краткий анонс (для списка)</label>
+      <input type="text" name="excerpt" value="{{ post.excerpt if post else '' }}" />
+    </div>
+    <div class="field">
+      <label>Текст</label>
+      <textarea name="body" style="min-height:220px">{{ post.body if post else '' }}</textarea>
+      <div class="hint">Абзацы разделяй пустой строкой (Enter).</div>
+    </div>
+    <div class="field">
+      <label>Обложка (изображение)</label>
+      <input type="file" name="cover" accept="image/*" />
+      {% if post and post.cover_image %}
+      <img class="cover-preview" src="/static/uploads/{{ post.cover_image }}" alt="" />
+      {% endif %}
+    </div>
+    <div class="field check">
+      <input type="checkbox" id="published" name="published" value="1" {{ 'checked' if (post and post.published) or not post }} />
+      <label for="published" style="margin:0">Опубликовать (снять галочку — черновик)</label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Сохранить</button>
+      <a class="btn btn-ghost" href="/admin">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

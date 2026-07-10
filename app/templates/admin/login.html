@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Вход в админку{% endblock %}
+{% block content %}
+<div class="wrap login-wrap">
+  <form class="login-card" method="post" action="/admin/login">
+    <h1>Админка</h1>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <div class="field">
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" autofocus
+             style="width:100%;background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:12px 14px;font-size:15px" />
+    </div>
+    <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Войти</button>
+  </form>
+</div>
+{% endblock %}

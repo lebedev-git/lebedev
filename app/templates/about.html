@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% set active = 'about' %}
+{% block title %}Обо мне — {{ owner.name }}{% endblock %}
+
+{% block content %}
+<section class="wrap" style="padding-top:56px">
+  <div class="hero-grid" style="align-items:start">
+    <div>
+      <div class="label reveal">Кто я</div>
+      <h2 class="reveal">Строю системы, а не описываю их</h2>
+      <p class="lead reveal">{{ about.lead }}</p>
+      {% for para in about.paragraphs %}
+      <p class="lead reveal">{{ para }}</p>
+      {% endfor %}
+    </div>
+    <div class="slot portrait reveal"><span class="ic">👤</span>Фото / портрет<small>Загрузим позже</small></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="label reveal">Принципы</div>
+  <h2 class="reveal">Как я работаю</h2>
+  <div class="grid grid-3">
+    {% for v in about['values'] %}
+    <div class="item reveal"><h3>{{ v.title }}</h3><p>{{ v.text }}</p></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="contact wrap">
+  <h2 class="reveal">Хотите обсудить задачу?</h2>
+  <p class="reveal">Напишите — отвечаю быстро.</p>
+  <a class="btn btn-primary reveal" href="{{ owner.telegram_url }}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
+</section>
+{% endblock %}
