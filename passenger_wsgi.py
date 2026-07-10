@@ -3,15 +3,25 @@
 Passenger умеет запускать только WSGI-приложения, а FastAPI — это ASGI.
 Мостик через a2wsgi превращает ASGI-приложение в WSGI.
 
-Важно: a2wsgi НЕ вызывает ASGI-события lifespan (startup/shutdown),
+Важно №1: Passenger стартует этот файл тем интерпретатором, который выбран
+в панели (может быть системный python). Наши зависимости лежат в venv, поэтому
+первым делом перезапускаем сам себя под python из venv (приём из документации
+reg.ru). Код до перезапуска намеренно простой и совместим с python 2.7.
+
+Важно №2: a2wsgi НЕ вызывает ASGI-события lifespan (startup/shutdown),
 поэтому инициализацию БД и первичный сид запускаем здесь явно.
 """
 import os
 import sys
 
-# Каталог с этим файлом — корень приложения. Добавляем в путь импорта,
-# чтобы работал `import app` независимо от рабочей директории Passenger.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# --- Переключение на интерпретатор из venv ---------------------------------
+INTERP = os.path.join(BASE_DIR, "venv", "bin", "python")
+if sys.executable != INTERP and os.path.exists(INTERP):
+    os.execl(INTERP, INTERP, *sys.argv)
+# Ниже код выполняется уже под python из venv (со всеми зависимостями).
+
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
