@@ -1,0 +1,196 @@
+/* Оболочка сцены. Комната серая намеренно — это прототип геометрии,
+   а не стиль. Стиль придёт вместе с моделью и токенами. */
+
+:root {
+  --ink: #16181a;
+  --paper: #f4f2ee;
+  --muted: #8d8880;
+  --line: rgba(255, 255, 255, .14);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #74706b;
+  color: var(--paper);
+  font: 15px/1.55 ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* ── HUD ─────────────────────────────────────────────────────────────────── */
+#hud {
+  position: fixed;
+  inset: 0 0 auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#hud > * { pointer-events: auto; }
+
+#crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+
+#crumbs button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: rgba(244, 242, 238, .62);
+  font: inherit;
+  cursor: pointer;
+  transition: color .15s;
+}
+
+#crumbs button:hover { color: var(--paper); }
+#crumbs .sep { color: rgba(244, 242, 238, .3); }
+#crumbs .current { color: var(--paper); }
+
+#zones { display: flex; gap: 8px; }
+
+#zones button {
+  background: rgba(20, 22, 24, .5);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 15px;
+  color: rgba(244, 242, 238, .78);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background .15s, color .15s;
+}
+
+#zones button:hover {
+  background: rgba(20, 22, 24, .78);
+  color: var(--paper);
+}
+
+/* ── Панель контента ─────────────────────────────────────────────────────── */
+#panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(430px, 100%);
+  height: 100%;
+  padding: 72px 34px 34px;
+  overflow-y: auto;
+  background: rgba(18, 20, 22, .88);
+  backdrop-filter: blur(18px);
+  border-left: 1px solid var(--line);
+  transform: translateX(100%);
+  transition: transform .45s cubic-bezier(.22, .8, .3, 1);
+  z-index: 3;
+}
+
+#panel.open { transform: none; }
+
+#panel .close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: rgba(244, 242, 238, .7);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#panel .close:hover { color: var(--paper); }
+
+#panel .meta {
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+#panel h2 {
+  margin: 10px 0 14px;
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+#panel .summary {
+  margin: 0 0 18px;
+  color: rgba(244, 242, 238, .8);
+}
+
+#panel .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+#panel .tags span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12px;
+  color: rgba(244, 242, 238, .66);
+}
+
+#panel .body {
+  white-space: pre-wrap;
+  color: rgba(244, 242, 238, .72);
+  font-size: 14px;
+}
+
+#panel .actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+#panel .actions a {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 16px;
+  color: rgba(244, 242, 238, .82);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+#panel .actions .primary {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+/* ── Дубль для поисковиков и фолбэк без JS ───────────────────────────────── */
+#projects-data {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+#projects-data .p-body { white-space: pre-wrap; }
+#projects-data a { color: inherit; }
+
+.scene-ready #projects-data { display: none; }

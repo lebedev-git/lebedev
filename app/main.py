@@ -74,6 +74,12 @@ def project_detail(request: Request, slug: str):
     return render(request, "project.html", p=proj)
 
 
+@app.get("/scene", response_class=HTMLResponse)
+def scene(request: Request):
+    """Прототип пространственной сцены: зона проектов на серой коробке."""
+    return render(request, "scene.html", projects=db.list_projects())
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
     return render(request, "about.html", about=ABOUT)
