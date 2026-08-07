@@ -27,6 +27,55 @@ function box(w, h, d, mat, x, y, z, name) {
   return m;
 }
 
+/**
+ * Подпись на лицевой стороне рамки. Рисуется в канвас и вешается текстурой —
+ * так текст остаётся частью объекта и читается под углом, в отличие от HTML.
+ */
+function labelMaterial(project) {
+  const W = 512;
+  const H = Math.round(W * (PROJECT_GRID.frameH / PROJECT_GRID.frameW));
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const g = c.getContext('2d');
+
+  g.fillStyle = project.featured ? '#f0ece4' : '#cfcac2';
+  g.fillRect(0, 0, W, H);
+
+  const pad = 34;
+  g.fillStyle = '#2b2f31';
+  g.font = '600 40px ui-sans-serif, system-ui, sans-serif';
+  g.textBaseline = 'top';
+
+  // Перенос по словам: длинные названия иначе уезжают за рамку.
+  const words = String(project.title || '').split(/\s+/);
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const probe = line ? `${line} ${w}` : w;
+    if (g.measureText(probe).width > W - pad * 2 && line) {
+      lines.push(line);
+      line = w;
+    } else {
+      line = probe;
+    }
+  }
+  if (line) lines.push(line);
+  lines.slice(0, 4).forEach((t, i) => g.fillText(t, pad, pad + i * 48));
+
+  const meta = [project.role, project.year].filter(Boolean).join(' · ');
+  if (meta) {
+    g.fillStyle = '#6d716f';
+    g.font = '400 26px ui-sans-serif, system-ui, sans-serif';
+    g.fillText(meta, pad, H - pad - 26);
+  }
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return new THREE.MeshLambertMaterial({ map: tex });
+}
+
 /** Строит комнату и мебель. Возвращает группу. */
 export function buildRoom() {
   const g = new THREE.Group();
@@ -87,9 +136,11 @@ export function buildProjectWall(projects) {
 
   slots.forEach((slot) => {
     const project = projects[slot.index] || null;
-    const mat = project
+    const edge = project
       ? (project.featured ? MAT.frameHi : MAT.frame)
       : MAT.frameOff;
+    // Порядок граней BoxGeometry: +x, -x, +y, -y, +z, -z. Подпись — на +z.
+    const mat = [edge, edge, edge, edge, project ? labelMaterial(project) : edge, edge];
 
     const mesh = box(
       PROJECT_GRID.frameW, PROJECT_GRID.frameH, 0.035,
