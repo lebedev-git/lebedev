@@ -52,7 +52,7 @@ def eng(page):
             hrefs.append(href)
     for href in hrefs[:4]:
         page.mouse.wheel(0, 500); page.wait_for_timeout(700)
-        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + href, wait_until="networkidle")
+        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + href, wait_until="domcontentloaded")
         page.wait_for_timeout(1400)
     page.mouse.wheel(0, 700); page.wait_for_timeout(1200)
 
@@ -61,7 +61,7 @@ def x7(page):
     """X7 Invest: закрытое приложение, сессия из .auth. Пройти по вкладкам."""
     page.wait_for_timeout(2500)
     for path in X7_TABS:
-        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + path, wait_until="networkidle")
+        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + path, wait_until="domcontentloaded")
         page.wait_for_timeout(600)
         page.mouse.wheel(0, 400); page.wait_for_timeout(1400)
 
@@ -87,11 +87,25 @@ def login(slug: str, url: str) -> None:
         browser = p.chromium.launch(headless=False, args=GPU_ARGS)
         ctx = browser.new_context(viewport={"width": W, "height": H})
         page = ctx.new_page()
-        page.goto(url)
-        print("Войди в приложение в открывшемся окне. Жду до 5 минут…", flush=True)
+        # Ждём только ответ сервера, с повторами: dev-сервер Next.js случайно
+        # держит соединение и не отвечает, вторая попытка обычно проходит.
+        for attempt in range(8):
+            try:
+                page.goto(url, wait_until="commit", timeout=12_000)
+                break
+            except Exception as exc:
+                print(f"попытка {attempt + 1}: {str(exc).splitlines()[0][:60]}", flush=True)
+        else:
+            raise SystemExit("страница не открылась")
+        print("Войди в приложение в открывшемся окне. Жду до 30 минут…", flush=True)
+        # httpOnly-cookie из страницы не видны, поэтому признак входа —
+        # либо ушли со страницы входа, либо в localStorage появился токен (SPA).
+        login_page = "/login" in url or "/signin" in url
         page.wait_for_function(
-            "() => Object.keys(localStorage).some(k => /auth|token|session/i.test(k)) || document.cookie.length > 20",
-            timeout=300_000,
+            "(loginPage) => loginPage"
+            " ? !/login|signin/i.test(location.pathname)"
+            " : Object.keys(localStorage).some(k => /auth|token|session/i.test(k))",
+            arg=login_page, timeout=1_800_000,
         )
         page.wait_for_timeout(1500)
         ctx.storage_state(path=str(AUTH / f"{slug}.json"))
@@ -116,7 +130,7 @@ def main(slug: str, url: str) -> None:
         )
         page = ctx.new_page()
         t0 = time.time()
-        page.goto(url, wait_until="networkidle")
+        page.goto(url, wait_until="domcontentloaded")
         SCENARIOS[slug](page)
         # видео пишется с открытия вкладки: белый экран и загрузку отрезаем
         ss = f"{max(time.time() - t0 - KEEP[slug], 0):.1f}"
