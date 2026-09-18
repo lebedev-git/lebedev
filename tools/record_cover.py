@@ -50,7 +50,8 @@ def main(slug: str, url: str) -> None:
     tmp = ROOT / ".playwright-mcp" / "video"
     shutil.rmtree(tmp, ignore_errors=True)
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"])
+        # GPU обязателен: на SwiftShader сцена рисует ~10 fps, и ролик дёргается.
+        browser = p.chromium.launch(args=["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"])
         ctx = browser.new_context(
             viewport={"width": W, "height": H},
             record_video_dir=str(tmp),
