@@ -112,7 +112,7 @@ const CMDS = {
       await sleep(70);
     }
     if (!REDUCED) drop(el);
-    line('wake up. ты уже в матрице — это n8n.', 'ok');
+    line('wake up. ты уже в матрице.', 'ok');
   },
 
   async coffee() {

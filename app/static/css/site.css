@@ -1274,7 +1274,7 @@ body::after {
 .biz-card {
   position: relative; display: block; text-decoration: none;
   aspect-ratio: 1.6 / 1; width: min(100%, 34rem); justify-self: start;
-  padding: 2.2rem 2.4rem; border-radius: 22px;
+  padding: 2.4rem 2.6rem; border-radius: 22px;
   background: linear-gradient(160deg, #1A1F2B, #0D1017 70%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 40px 80px -30px rgba(0, 0, 0, 0.9),
@@ -1295,10 +1295,10 @@ body::after {
 }
 .biz-name, .biz-role, .biz-handle, .biz-phone { position: relative; }
 .biz-logo { position: absolute; top: 1.8rem; right: 2rem; width: 40px; height: auto; opacity: 0.85; }
-.biz-name { display: block; font-size: 2rem; font-weight: 700; color: #FFFFFF; letter-spacing: -0.01em; }
-.biz-role { display: block; font-family: var(--font-mono); font-size: 0.9rem; color: var(--fg-muted); margin-top: 0.3rem; }
-.biz-handle { display: block; font-family: var(--font-mono); font-size: 1.35rem; color: rgb(var(--signal)); margin-top: 2.2rem; }
-.biz-phone { display: block; font-family: var(--font-mono); font-size: 1.1rem; color: var(--fg-muted); margin-top: 0.5rem; }
+.biz-name { display: block; font-size: 2.5rem; font-weight: 700; color: #FFFFFF; letter-spacing: -0.01em; }
+.biz-role { display: block; font-family: var(--font-mono); font-size: 1.05rem; color: var(--fg-muted); margin-top: 0.3rem; }
+.biz-handle { display: block; font-family: var(--font-mono); font-size: 1.7rem; color: rgb(var(--signal)); margin-top: 2.2rem; }
+.biz-phone { display: block; font-family: var(--font-mono); font-size: 1.35rem; color: var(--fg-muted); margin-top: 0.5rem; }
 .biz-resident {
   position: absolute; right: 2rem; bottom: 1.6rem;
   font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
