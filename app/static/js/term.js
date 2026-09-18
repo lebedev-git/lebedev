@@ -158,8 +158,10 @@ const CMDS = {
     const cards = [...document.querySelectorAll('.project-card')];
     if (!cards.length) { line('пусто', 'dim'); return; }
     cards.forEach((c) => {
-      const title = c.querySelector('.project-title')?.textContent.trim() || c.href;
-      link(title, c.href, '→ ');
+      const go = c.querySelector('.project-go');
+      if (!go) return;
+      const title = c.querySelector('.project-title')?.textContent.trim() || go.href;
+      link(title, go.href, '→ ');
     });
   },
 

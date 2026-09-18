@@ -110,3 +110,10 @@ if (indexList && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     thumb.style.setProperty('--py', Math.round(y));
   });
 }
+
+// ── Видео-обложка играет только под курсором ─────────────────────────────────
+document.querySelectorAll('.project-card video').forEach((v) => {
+  const card = v.closest('.project-card');
+  card.addEventListener('pointerenter', () => { v.play().catch(() => {}); });
+  card.addEventListener('pointerleave', () => { v.pause(); });
+});

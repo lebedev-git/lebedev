@@ -127,11 +127,11 @@
     <div class="projects-grid">
       {% for p in projects %}
       {% set first_tag = p.tags.split(',')[0].strip() if p.tags else 'Проект' %}
-      <a class="project-card rise" {% if p.link %}href="{{ p.link }}" target="_blank" rel="noopener"{% endif %} data-tags="{{ p.tags }}" data-category="{{ first_tag }}">
+      <article class="project-card rise" data-tags="{{ p.tags }}" data-category="{{ first_tag }}">
         <div class="project-cover-frame">
           <div class="project-cover">
             {% if p.slug in video_covers %}
-            <video src="/static/uploads/cover-{{ p.slug }}.mp4" autoplay muted loop playsinline preload="metadata"
+            <video src="/static/uploads/cover-{{ p.slug }}.mp4" muted loop playsinline preload="metadata"
                    {% if p.cover_image %}poster="/static/uploads/{{ p.cover_image }}"{% endif %} aria-label="{{ p.title }}"></video>
             {% elif p.cover_image %}
             <img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" loading="lazy" />
@@ -153,9 +153,12 @@
               <span class="status-dot"></span>
               <span class="status-text">{% if 'сейчас' in p.year or '2026' in p.year %}Активен · {{ p.year }}{% else %}Внедрен · {{ p.year }}{% endif %}</span>
             </div>
+            {% if p.link %}
+            <a class="project-go" href="{{ p.link }}" target="_blank" rel="noopener">Перейти ↗</a>
+            {% endif %}
           </div>
         </div>
-      </a>
+      </article>
       {% endfor %}
     </div>
     {% else %}
