@@ -18,7 +18,7 @@ from .auth import (
     register_login_result,
     require_admin,
 )
-from .config import OWNER, SITE_URL, STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR
+from .config import OWNER, PRIVATE_PROJECTS, SITE_URL, STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR
 from .content import ABOUT, EXPERIENCE, SERVICES, SKILLS, STATS
 from .seed import run as run_seed
 from .utils import save_upload, unique_slug
@@ -112,6 +112,7 @@ def home(request: Request):
         request, "index.html",
         projects=items,
         video_covers=video_covers,
+        private=PRIVATE_PROJECTS,
         sections=tags,
         tag_counts=tag_counts,
         about=ABOUT,

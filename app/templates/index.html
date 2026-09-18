@@ -149,11 +149,18 @@
           <p class="project-summary">{{ p.summary }}</p>
 
           <div class="project-bottom">
+            {% if p.slug in private %}
+            <div class="project-status is-private">
+              <span class="status-dot"></span>
+              <span class="status-text">Закрытый доступ · {{ p.year }}</span>
+            </div>
+            {% else %}
             <div class="project-status">
               <span class="status-dot"></span>
               <span class="status-text">{% if 'сейчас' in p.year or '2026' in p.year %}Активен · {{ p.year }}{% else %}Внедрен · {{ p.year }}{% endif %}</span>
             </div>
-            {% if p.link %}
+            {% endif %}
+            {% if p.link and p.slug not in private %}
             <a class="project-go" href="{{ p.link }}" target="_blank" rel="noopener">Перейти ↗</a>
             {% endif %}
           </div>

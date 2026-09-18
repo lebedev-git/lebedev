@@ -57,23 +57,62 @@ def eng(page):
     page.mouse.wheel(0, 700); page.wait_for_timeout(1200)
 
 
+def x7(page):
+    """X7 Invest: закрытое приложение, сессия из .auth. Пройти по вкладкам."""
+    page.wait_for_timeout(2500)
+    for path in X7_TABS:
+        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + path, wait_until="networkidle")
+        page.wait_for_timeout(600)
+        page.mouse.wheel(0, 400); page.wait_for_timeout(1400)
+
+
+X7_TABS = ["/", "/analytics", "/deals"]  # дашборд, графики, карточки сделок; выплаты — таблица, скучно
+
 # Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
-SCENARIOS = {"mayak": mayak, "english-path": eng}
-KEEP = {"mayak": 19.0, "english-path": 10.0}  # сколько последних секунд оставить
+SCENARIOS = {"mayak": mayak, "english-path": eng, "x7-invest": x7}
+KEEP = {"mayak": 19.0, "english-path": 10.0, "x7-invest": 10.0}  # сколько последних секунд оставить
+
+
+AUTH = ROOT / ".auth"  # сессии закрытых приложений; в .gitignore
+GPU_ARGS = ["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"]
+
+
+def login(slug: str, url: str) -> None:
+    """Открыть обычное окно: пользователь входит сам, сессия сохраняется в .auth/<slug>.json.
+
+    Пароль скрипту не нужен и нигде не хранится — только cookies и localStorage
+    после входа. Ждём, пока в адресе или хранилище появится признак входа."""
+    AUTH.mkdir(exist_ok=True)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False, args=GPU_ARGS)
+        ctx = browser.new_context(viewport={"width": W, "height": H})
+        page = ctx.new_page()
+        page.goto(url)
+        print("Войди в приложение в открывшемся окне. Жду до 5 минут…", flush=True)
+        page.wait_for_function(
+            "() => Object.keys(localStorage).some(k => /auth|token|session/i.test(k)) || document.cookie.length > 20",
+            timeout=300_000,
+        )
+        page.wait_for_timeout(1500)
+        ctx.storage_state(path=str(AUTH / f"{slug}.json"))
+        print("Сессия сохранена:", AUTH / f"{slug}.json")
+        browser.close()
 
 
 def main(slug: str, url: str) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     tmp = ROOT / ".playwright-mcp" / "video"
     shutil.rmtree(tmp, ignore_errors=True)
+    state = AUTH / f"{slug}.json"
     with sync_playwright() as p:
         # GPU обязателен: на SwiftShader сцена рисует ~10 fps, и ролик дёргается.
-        browser = p.chromium.launch(args=["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"])
+        browser = p.chromium.launch(args=GPU_ARGS)
         ctx = browser.new_context(
             viewport={"width": W, "height": H},
             record_video_dir=str(tmp),
             record_video_size={"width": W, "height": H},
             device_scale_factor=1,
+            storage_state=str(state) if state.exists() else None,
         )
         page = ctx.new_page()
         t0 = time.time()
@@ -94,4 +133,7 @@ def main(slug: str, url: str) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    if sys.argv[1] == "login":
+        login(sys.argv[2], sys.argv[3])
+    else:
+        main(sys.argv[1], sys.argv[2])
