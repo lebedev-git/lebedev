@@ -38,25 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  // 3. Магнитные кнопки (Magnetic Physics)
-  const magneticEls = document.querySelectorAll('.magnetic');
-  magneticEls.forEach((el) => {
-    let rect = null;
-    el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); }, { passive: true });
-    el.addEventListener('mousemove', (e) => {
-      if (!rect) rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) * 0.22;
-      const dy = (e.clientY - cy) * 0.22;
-      el.style.transform = `translate(${dx}px, ${dy}px)`;
-    }, { passive: true });
-    el.addEventListener('mouseleave', () => {
-      rect = null;
-      el.style.transform = '';
-    }, { passive: true });
-  });
-
   // 4. Копирование в буфер в 1 клик с тостом
   const copyButtons = document.querySelectorAll('[data-copy]');
   const toast = document.getElementById('toast-notify');

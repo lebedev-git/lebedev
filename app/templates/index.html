@@ -6,14 +6,6 @@
   <header class="portfolio-hero">
     <div class="hero-grid">
     <div class="hero-copy">
-    <!-- Refero Style Hero Status Pill -->
-    <div class="hero-status-pill rise">
-      <span class="pulse-beacon"></span>
-      <span class="pill-text">Резидент ИТ-парка</span>
-      <span class="pill-sep">·</span>
-      <span class="pill-sub">AI Automation & Digital Systems</span>
-    </div>
-
     <h1 class="hero-title">Автономные AI&#8209;системы и цифровые продукты</h1>
     <p class="lead rise">
       Проектирую и создаю сквозную автоматизацию процессов, агентные AI-решения и Telegram-экосистемы. Превращаю рутину и сложные данные в управляемый результат без участия человека.
@@ -125,11 +117,7 @@
 
   <section class="projects-section" id="projects">
     <div class="projects-section-header rise">
-      <div class="section-title-wrap">
-        <h2 class="section-heading">Проекты и кейсы</h2>
-        <span class="projects-count">{{ projects|length }} {{ plural(projects|length, "внедрение", "внедрения", "внедрений") }}</span>
-      </div>
-      <p class="section-sub">Автономные архитектуры, ИИ-инструменты и коммерческие решения</p>
+      <h2 class="section-heading">Проекты и кейсы</h2>
     </div>
 
     {% if projects %}
@@ -184,10 +172,10 @@
           Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ. Напишите задачу — предложу оптимальную архитектуру и рассчитаю сроки.
         </p>
         <div class="cta-actions">
-          <a href="{{ owner.telegram_url }}" class="cta-btn magnetic" target="_blank" rel="noopener">
+          <a href="{{ owner.telegram_url }}" class="cta-btn" target="_blank" rel="noopener">
             <span>Обсудить в Telegram ↗</span>
           </a>
-          <button type="button" class="copy-handle-btn magnetic" data-copy="{{ owner.telegram }}" title="Нажмите, чтобы скопировать ник в буфер">
+          <button type="button" class="copy-handle-btn" data-copy="{{ owner.telegram }}" title="Нажмите, чтобы скопировать ник в буфер">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -195,6 +183,8 @@
             <span class="copy-handle-text">@{{ owner.telegram }}</span>
           </button>
         </div>
+        <!-- Логотип появится сам, как только положишь app/static/icons/it-park.svg -->
+        <p class="cta-resident">{{ icon_svg('it-park', 20)|safe }}<span>Резидент ИТ-парка</span></p>
       </div>
     </div>
   </section>

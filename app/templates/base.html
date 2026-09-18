@@ -31,7 +31,6 @@
 <!-- Класс ставится до отрисовки: иначе анимируемые блоки успевают моргнуть
      конечным состоянием, прежде чем скрипт их спрячет. -->
 <script>document.documentElement.classList.replace("no-js", "js")</script>
-<link rel="preload" href="/static/fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/static/css/fonts.css?v={{ asset_v }}" />
 <link rel="stylesheet" href="/static/css/core.css?v={{ asset_v }}" />
 <link rel="stylesheet" href="/static/css/site.css?v={{ asset_v }}" />
@@ -42,16 +41,7 @@
 
 <nav class="top">
   <div class="wrap nav-inner">
-    <div class="brand-group">
-      <a href="/" class="brand">
-        <span class="brand-name">{{ owner.name }}</span>
-        <span class="brand-role">AI Automation</span>
-      </a>
-      <div class="nav-resident-badge" title="Официальный резидент ИТ-парка">
-        <span class="pulse-beacon"></span>
-        <span>Резидент ИТ-парка</span>
-      </div>
-    </div>
+    <a href="/" class="brand"><span class="brand-name">{{ owner.name }}</span></a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="nav-links">Меню</button>
     <div class="links" id="nav-links">
       <a href="/#stack">Навыки</a>

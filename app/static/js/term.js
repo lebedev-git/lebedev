@@ -203,7 +203,22 @@ form.addEventListener('submit', async (e) => {
   try { await run(value); } finally { busy = false; }
 });
 
+// Tab дополняет команду; повторный Tab перебирает варианты по кругу.
+const COMPLETIONS = [...Object.keys(CMDS).filter((k) => !['rm', 'sudo'].includes(k)), 'rm -rf routine', 'sudo hire'].sort();
+let tabPrefix = null;
+let tabIdx = 0;
+
 input.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    if (tabPrefix === null) tabPrefix = input.value.trim().toLowerCase();
+    const opts = COMPLETIONS.filter((c) => c.startsWith(tabPrefix));
+    if (!opts.length) return;
+    input.value = opts[tabIdx % opts.length];
+    tabIdx++;
+    return;
+  }
+  tabPrefix = null; tabIdx = 0;
   if (e.key === 'ArrowUp' && histPos > 0) { histPos--; input.value = history[histPos]; e.preventDefault(); }
   if (e.key === 'ArrowDown') {
     histPos = Math.min(histPos + 1, history.length);
