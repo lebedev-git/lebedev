@@ -20,8 +20,11 @@
       <pre class="term-body" id="term-body" data-tg="{{ owner.telegram_url }}"></pre>
       <form class="term-input-row" id="term-form" autocomplete="off">
         <span class="term-prompt">$</span>
-        <input id="term-input" type="text" placeholder="help" aria-label="Команда терминала"
-               autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <span class="term-field">
+          <span class="term-ghost" id="term-ghost" aria-hidden="true"></span>
+          <input id="term-input" type="text" placeholder="help" aria-label="Команда терминала"
+                 autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        </span>
       </form>
     </aside>
     </div>
@@ -29,7 +32,7 @@
     <!-- Стек технологий в стиле Refero с официальными SVG -->
     <div class="tech-stack-section rise" id="stack">
       <div class="tech-stack-header">
-        <span class="tech-stack-title">Ключевой технологический стек & инструменты</span>
+        <span class="tech-stack-title">Стек и инструменты</span>
       </div>
       <div class="tech-grid">
         <div class="tech-card" data-tech="claude">
@@ -115,6 +118,47 @@
     </div>
   </header>
 
+  <!-- Навыки: то, что закрывается целиком, не только код -->
+  <section class="skills-section" id="skills">
+    <div class="skills-head rise">
+      <span class="skills-label">// НАВЫКИ</span>
+      <h2 class="skills-title">От патента до продакшена</h2>
+    </div>
+    <div class="skills-grid">
+      <article class="skill-card skill-card-wide rise">
+        <span class="skill-no">01</span><span class="skill-dot"></span>
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><rect x="3" y="10.5" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/><circle cx="7" cy="6.5" r=".6" fill="currentColor"/><circle cx="7" cy="13" r=".6" fill="currentColor"/><circle cx="7" cy="19" r=".6" fill="currentColor"/></svg></div>
+        <h3>Бэкенд</h3>
+        <p>Python, FastAPI, PostgreSQL, Docker.<br>Интеграции и автоматизация на n8n, Telegram-боты.</p>
+        <div class="skill-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><rect x="3" y="10.5" width="18" height="5" rx="1.5"/><rect x="3" y="17" width="18" height="4" rx="1.5"/><circle cx="7" cy="6.5" r=".6" fill="currentColor"/><circle cx="7" cy="13" r=".6" fill="currentColor"/><circle cx="7" cy="19" r=".6" fill="currentColor"/></svg></div>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">02</span><span class="skill-dot"></span>
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18"/><circle cx="6.5" cy="6.5" r=".6" fill="currentColor"/><circle cx="9" cy="6.5" r=".6" fill="currentColor"/><circle cx="11.5" cy="6.5" r=".6" fill="currentColor"/></svg></div>
+        <h3>Фронтенд</h3>
+        <p>React, TypeScript,<br>дизайн-системы, Figma.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">03</span><span class="skill-dot"></span>
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></div>
+        <h3>3D и анимация</h3>
+        <p>Blender: моделирование,<br>анимация и рендер для продукта.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">04</span><span class="skill-dot"></span>
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 9h6M9 12h6"/><circle cx="12" cy="17" r="2"/><path d="m11 19-1 2.5 2-1 2 1-1-2.5"/></svg></div>
+        <h3>Патентные заявки</h3>
+        <p>Подготовка и подача заявки на изобретение,<br>участие в защите интеллектуальной собственности.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">05</span><span class="skill-dot"></span>
+        <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 19.5 5v6.5c0 4.5-3 8-7.5 9.5C7.5 19.5 4.5 16 4.5 11.5V5z"/><path d="m9 12 2 2 4-4.5"/></svg></div>
+        <h3>Регистрация ПО и аттестация</h3>
+        <p>Свидетельство Роспатента на программу для ЭВМ,<br>реестр отечественного ПО, подготовка к аттестации ФСТЭК.</p>
+      </article>
+    </div>
+  </section>
+
   <section class="projects-section" id="projects">
     <div class="projects-section-header rise">
       <h2 class="section-heading">Проекты и кейсы</h2>
@@ -159,33 +203,26 @@
   </section>
 
   <!-- Refero Style Conversion CTA Banner -->
-  <section class="cta-banner-section rise" id="contact">
-    <div class="cta-banner">
-      <div class="cta-banner-glow" aria-hidden="true"></div>
-      <div class="cta-banner-content">
-        <div class="cta-badge">
-          <span class="pulse-beacon"></span>
-          <span>Открыт к проектам · 2026</span>
-        </div>
-        <h2 class="cta-title">Есть процесс, который нужно автоматизировать?</h2>
-        <p class="cta-desc">
-          Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ. Напишите задачу — предложу оптимальную архитектуру и рассчитаю сроки.
+  <section class="contact-section rise" id="contact">
+    <div class="contact-grid">
+      <div class="contact-copy">
+        <h2 class="contact-title">Давайте обсудим вашу задачу</h2>
+        <p class="contact-desc">
+          Разберу процесс, предложу архитектуру и план реализации. Отвечу на вопросы и назову сроки.
         </p>
-        <div class="cta-actions">
-          <a href="{{ owner.telegram_url }}" class="cta-btn" target="_blank" rel="noopener">
-            <span>Обсудить в Telegram ↗</span>
-          </a>
-          <button type="button" class="copy-handle-btn" data-copy="{{ owner.telegram }}" title="Нажмите, чтобы скопировать ник в буфер">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span class="copy-handle-text">@{{ owner.telegram }}</span>
-          </button>
-        </div>
-        <!-- Логотип появится сам, как только положишь app/static/icons/it-park.svg -->
-        <p class="cta-resident">{{ icon_svg('it-park', 20)|safe }}<span>Резидент ИТ-парка</span></p>
+        <a href="{{ owner.telegram_url }}" class="cta-btn" target="_blank" rel="noopener">
+          <span>Написать в Telegram ↗</span>
+        </a>
       </div>
+      <a class="biz-card" href="{{ owner.telegram_url }}" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+        <span class="biz-shine" aria-hidden="true"></span>
+        <img class="biz-logo" src="/static/icons/it-park.png" alt="ИТ-парк им. Башира Рамеева" width="40" height="60" />
+        <span class="biz-name">{{ owner.name }}</span>
+        <span class="biz-role">AI Automation Engineer</span>
+        <span class="biz-handle">@{{ owner.telegram }}</span>
+        <span class="biz-phone">{{ owner.phone }}</span>
+        <span class="biz-resident">Резидент ИТ-парка</span>
+      </a>
     </div>
   </section>
 </div>

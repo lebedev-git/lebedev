@@ -15,8 +15,6 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let busy = false;
-const history = [];
-let histPos = 0;
 
 // ── Вывод ────────────────────────────────────────────────────────────────────
 function kind(s) {
@@ -72,7 +70,7 @@ const CMDS = {
     [['yes', 'соглашаться со всем'], ['sl', 'поезд'], ['matrix', 'дождь'],
      ['coffee', 'перерыв'], ['rm -rf routine', 'удалить рутину'], ['sudo hire', 'нанять'],
      ['whoami', 'кто здесь'], ['ls', 'проекты'], ['clear', 'очистить']]
-      .forEach(([c, d]) => line(`  ${c.padEnd(16)} ${d}`, 'dim'));
+      .forEach(([c, d]) => { line(`  ${c.padEnd(16)} ${d}`, 'dim').dataset.cmd = c; });
   },
 
   async yes() {
@@ -198,32 +196,58 @@ form.addEventListener('submit', async (e) => {
   if (busy) return;
   const value = input.value;
   input.value = '';
-  history.push(value); histPos = history.length;
+  setGhost();
+  pick = -1;
   busy = true;
   try { await run(value); } finally { busy = false; }
 });
 
-// Tab дополняет команду; повторный Tab перебирает варианты по кругу.
-const COMPLETIONS = [...Object.keys(CMDS).filter((k) => !['rm', 'sudo'].includes(k)), 'rm -rf routine', 'sudo hire'].sort();
-let tabPrefix = null;
-let tabIdx = 0;
+// ── Подсказка и выбор команды ────────────────────────────────────────────────
+// Ввёл первые буквы — серым дописывается остаток, Tab или → принимает.
+// ↑/↓ листают список команд прямо в строке ввода, Enter запускает.
+const COMMANDS = ['help', 'yes', 'sl', 'matrix', 'coffee', 'rm -rf routine', 'sudo hire', 'whoami', 'ls', 'clear'];
+const ghost = document.getElementById('term-ghost');
+let pick = -1;
+
+function suggestion() {
+  const v = input.value.toLowerCase();
+  if (!v) return '';
+  return COMMANDS.find((c) => c.startsWith(v) && c !== v) || '';
+}
+
+function setGhost() {
+  const s = suggestion();
+  if (!ghost) return;
+  ghost.textContent = '';
+  if (!s) return;
+  const typed = document.createElement('span');
+  typed.className = 'typed';
+  typed.textContent = input.value;
+  ghost.append(typed, s.slice(input.value.length));
+}
+
+function highlightRow() {
+  term.querySelectorAll('.ln[data-cmd]').forEach((el) => {
+    el.classList.toggle('is-pick', el.dataset.cmd === input.value);
+  });
+}
+
+input.addEventListener('input', () => { pick = -1; setGhost(); });
 
 input.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    if (tabPrefix === null) tabPrefix = input.value.trim().toLowerCase();
-    const opts = COMPLETIONS.filter((c) => c.startsWith(tabPrefix));
-    if (!opts.length) return;
-    input.value = opts[tabIdx % opts.length];
-    tabIdx++;
+  if (e.key === 'Tab' || (e.key === 'ArrowRight' && input.selectionStart === input.value.length)) {
+    const s = suggestion();
+    if (s) { e.preventDefault(); input.value = s; setGhost(); }
+    else if (e.key === 'Tab') e.preventDefault();
     return;
   }
-  tabPrefix = null; tabIdx = 0;
-  if (e.key === 'ArrowUp' && histPos > 0) { histPos--; input.value = history[histPos]; e.preventDefault(); }
-  if (e.key === 'ArrowDown') {
-    histPos = Math.min(histPos + 1, history.length);
-    input.value = history[histPos] || '';
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
     e.preventDefault();
+    const step = e.key === 'ArrowDown' ? 1 : -1;
+    pick = (pick + step + COMMANDS.length) % COMMANDS.length;
+    input.value = COMMANDS[pick];
+    setGhost();
+    highlightRow();
   }
 });
 
