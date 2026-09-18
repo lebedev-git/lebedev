@@ -86,7 +86,7 @@ body { padding-top: 64px; }
   flex-shrink: 0;
   min-width: 0;
 }
-.brand-group > a.brand {
+a.brand {
   text-decoration: none;
   font-size: var(--body-sm);
   font-weight: 600;
@@ -1180,3 +1180,11 @@ body::after {
   .portfolio-hero::before, .portfolio-hero::after { animation: none; }
   .term-cursor { animation: none; }
 }
+
+/* ── «Резидент ИТ-парка» в блоке контактов ───────────────────────────── */
+.cta-banner .cta-resident {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  margin: var(--space-md) 0 0;
+  font-family: var(--font-mono); font-size: 0.78rem; color: var(--fg-faint);
+}
+.cta-banner .cta-resident svg { width: 20px; height: 20px; color: var(--fg-muted); }
