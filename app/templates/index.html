@@ -2,82 +2,202 @@
 {% set active = 'home' %}
 
 {% block content %}
-<header class="hero wrap">
-  <div class="hero-grid">
-    <div class="hero-main">
-      <div class="eyebrow reveal"><span class="dot"></span> Открыт к проектам · {{ owner.city }}</div>
-      <h1 class="reveal">Андрей<br>Лебедев</h1>
-      <p class="role reveal"><b>AI Automation Engineer</b> и руководитель проектов. Превращаю идеи и рутину в работающие системы на базе искусственного интеллекта.</p>
-      <div class="meta reveal">
-        <span class="chip">n8n</span>
-        <span class="chip">Telegram-боты</span>
-        <span class="chip">LLM · OpenAI / Claude</span>
-        <span class="chip">Docker</span>
-      </div>
-      <div class="hero-cta reveal">
-        <a class="btn btn-primary" href="/projects">Смотреть проекты</a>
-        <a class="btn btn-ghost" href="{{ owner.telegram_url }}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
-      </div>
+<div class="wrap">
+  <header class="portfolio-hero">
+    <div class="hero-grid">
+    <div class="hero-copy">
+    <!-- Refero Style Hero Status Pill -->
+    <div class="hero-status-pill rise">
+      <span class="pulse-beacon"></span>
+      <span class="pill-text">Резидент ИТ-парка</span>
+      <span class="pill-sep">·</span>
+      <span class="pill-sub">AI Automation & Digital Systems</span>
     </div>
-    <div class="hero-side reveal">
-      {% for s in stats %}
-      <div class="stat{% if loop.first %} wide{% endif %}"><div class="num">{{ s.num }}</div><div class="cap">{{ s.cap }}</div></div>
-      {% endfor %}
-    </div>
-  </div>
-</header>
 
-<!-- Избранные проекты -->
-<section class="wrap">
-  <div class="section-head reveal">
-    <div><div class="label">Избранное</div><h2>Проекты</h2></div>
-    <a class="muted-link" href="/projects">Все проекты →</a>
-  </div>
-  {% if featured %}
-  <div class="pcards">
-    {% for p in featured %}
-    <a class="pcard reveal" href="/projects/{{ p.slug }}">
-      <div class="cover">
-        {% if p.cover_image %}<img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" />{% else %}<span class="ph">{{ p.title[0]|upper }}</span>{% endif %}
+    <h1 class="hero-title">Автономные AI&#8209;системы и цифровые продукты</h1>
+    <p class="lead rise">
+      Проектирую и создаю сквозную автоматизацию процессов, агентные AI-решения и Telegram-экосистемы. Превращаю рутину и сложные данные в управляемый результат без участия человека.
+    </p>
+    </div>
+
+    <!-- Терминал с пасхалками: команды в term.js -->
+    <aside class="hero-terminal rise" aria-label="Терминал">
+      <div class="term-bar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
       </div>
-      <div class="body">
-        <h3>{{ p.title }}</h3>
-        <p class="summary">{{ p.summary }}</p>
-        <div class="tags">
-          {% for t in p.tags.split(',') if t.strip() %}<span class="tag">{{ t.strip() }}</span>{% endfor %}
+      <pre class="term-body" id="term-body" data-tg="{{ owner.telegram_url }}"></pre>
+      <form class="term-input-row" id="term-form" autocomplete="off">
+        <span class="term-prompt">$</span>
+        <input id="term-input" type="text" placeholder="help" aria-label="Команда терминала"
+               autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      </form>
+    </aside>
+    </div>
+
+    <!-- Стек технологий в стиле Refero с официальными SVG -->
+    <div class="tech-stack-section rise" id="stack">
+      <div class="tech-stack-header">
+        <span class="tech-stack-title">Ключевой технологический стек & инструменты</span>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card" data-tech="claude">
+          <div class="tech-icon-wrap">{{ icon_svg('claude', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Claude</span>
+            <span class="tech-desc">Anthropic · Reasoning & RAG</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="openai">
+          <div class="tech-icon-wrap">{{ icon_svg('openai', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">OpenAI / Codex</span>
+            <span class="tech-desc">LLM & Code Agents</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="n8n">
+          <div class="tech-icon-wrap">{{ icon_svg('n8n', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">n8n</span>
+            <span class="tech-desc">Оркестрация процессов</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="docker">
+          <div class="tech-icon-wrap">{{ icon_svg('docker', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Docker</span>
+            <span class="tech-desc">Контейнеризация & Деплой</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="python">
+          <div class="tech-icon-wrap">{{ icon_svg('python', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Python</span>
+            <span class="tech-desc">Бэкенд, LangChain, Агенты</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="fastapi">
+          <div class="tech-icon-wrap">{{ icon_svg('fastapi', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">FastAPI</span>
+            <span class="tech-desc">Async REST & Microservices</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="figma">
+          <div class="tech-icon-wrap">{{ icon_svg('figma', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Figma</span>
+            <span class="tech-desc">UI/UX & Дизайн-системы</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="blender">
+          <div class="tech-icon-wrap">{{ icon_svg('blender', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Blender</span>
+            <span class="tech-desc">3D-моделирование & Рендер</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="postgresql">
+          <div class="tech-icon-wrap">{{ icon_svg('postgresql', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">PostgreSQL</span>
+            <span class="tech-desc">БД & pgvector эмбеддинги</span>
+          </div>
+        </div>
+
+        <div class="tech-card" data-tech="telegram">
+          <div class="tech-icon-wrap">{{ icon_svg('telegram', 22)|safe }}</div>
+          <div class="tech-info">
+            <span class="tech-name">Telegram API</span>
+            <span class="tech-desc">Боты, Mini Apps, Webhooks</span>
+          </div>
         </div>
       </div>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="empty">Проекты скоро появятся.</p>
-  {% endif %}
-</section>
-
-<!-- Навыки кратко -->
-<section class="wrap">
-  <div class="label reveal">Компетенции</div>
-  <h2 class="reveal">Чем владею</h2>
-  <div class="skills">
-    {% for sk in skills %}
-    <div class="skillcard reveal">
-      <h4>{{ sk.group }}</h4>
-      <div class="items">{% for i in sk['items'] %}<span class="chip">{{ i }}</span>{% endfor %}</div>
     </div>
-    {% endfor %}
-  </div>
-</section>
+  </header>
 
-<!-- Контакты -->
-<section class="contact wrap">
-  <div class="label reveal" style="text-align:center">Контакты</div>
-  <h2 class="reveal">Давайте поговорим</h2>
-  <p class="reveal">Открыт к интересным проектам и задачам. Пишите — обсудим, чем могу быть полезен.</p>
-  <a class="btn btn-primary reveal" href="{{ owner.telegram_url }}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
-  <div class="links reveal">
-    <a href="tel:{{ owner.phone_href }}">{{ owner.phone }}</a>
-    <a href="{{ owner.telegram_url }}" target="_blank" rel="noopener">@{{ owner.telegram }}</a>
-  </div>
-</section>
+  <section class="projects-section" id="projects">
+    <div class="projects-section-header rise">
+      <div class="section-title-wrap">
+        <h2 class="section-heading">Проекты и кейсы</h2>
+        <span class="projects-count">{{ projects|length }} {{ plural(projects|length, "внедрение", "внедрения", "внедрений") }}</span>
+      </div>
+      <p class="section-sub">Автономные архитектуры, ИИ-инструменты и коммерческие решения</p>
+    </div>
+
+    {% if projects %}
+    <div class="projects-grid">
+      {% for p in projects %}
+      {% set first_tag = p.tags.split(',')[0].strip() if p.tags else 'Проект' %}
+      <a class="project-card rise" {% if p.link %}href="{{ p.link }}" target="_blank" rel="noopener"{% endif %} data-tags="{{ p.tags }}" data-category="{{ first_tag }}">
+        <div class="project-cover-frame">
+          <div class="project-cover">
+            {% if p.cover_image %}
+            <img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" loading="lazy" />
+            {% else %}
+            {{ cover_svg(p, 640, 400)|safe }}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="project-content">
+          <div class="project-header-row">
+            <h2 class="project-title">{{ p.title }}</h2>
+          </div>
+
+          <p class="project-summary">{{ p.summary }}</p>
+
+          <div class="project-bottom">
+            <div class="project-status">
+              <span class="status-dot"></span>
+              <span class="status-text">{% if 'сейчас' in p.year or '2026' in p.year %}Активен · {{ p.year }}{% else %}Внедрен · {{ p.year }}{% endif %}</span>
+            </div>
+            <div class="project-cat-tag" data-category="{{ first_tag }}">{{ first_tag }}</div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Проекты скоро появятся.</p>
+    {% endif %}
+  </section>
+
+  <!-- Refero Style Conversion CTA Banner -->
+  <section class="cta-banner-section rise" id="contact">
+    <div class="cta-banner">
+      <div class="cta-banner-glow" aria-hidden="true"></div>
+      <div class="cta-banner-content">
+        <div class="cta-badge">
+          <span class="pulse-beacon"></span>
+          <span>Открыт к проектам · 2026</span>
+        </div>
+        <h2 class="cta-title">Есть процесс, который нужно автоматизировать?</h2>
+        <p class="cta-desc">
+          Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ. Напишите задачу — предложу оптимальную архитектуру и рассчитаю сроки.
+        </p>
+        <div class="cta-actions">
+          <a href="{{ owner.telegram_url }}" class="cta-btn magnetic" target="_blank" rel="noopener">
+            <span>Обсудить в Telegram ↗</span>
+          </a>
+          <button type="button" class="copy-handle-btn magnetic" data-copy="{{ owner.telegram }}" title="Нажмите, чтобы скопировать ник в буфер">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-handle-text">@{{ owner.telegram }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="module" src="/static/js/term.js?v={{ asset_v }}"></script>
 {% endblock %}

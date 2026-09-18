@@ -1,0 +1,229 @@
+/*
+ * Ядро оформления. Снято с lamalama.com и адаптировано под кириллицу
+ * и под личный бренд вместо агентства.
+ *
+ * Что взято один в один:
+ *   - нейтрали: тёмный холст и кремовый текст, а не #000 и #fff;
+ *   - механика отступов: max(минимум в px, доля от ширины при эталоне 1440);
+ *   - сетка 12 колонок на десктопе и 6 на мобильном;
+ *   - трекинг -0.02em на всём тексте и интерлиньяж 0.8 на дисплее;
+ *   - крошечные радиусы 4-6px и таблетки, границы ровно 1px.
+ *
+ * Что изменено и почему:
+ *   - гарнитуры: Suisse BP Intl и Sometype Mono кириллицы не имеют.
+ *     Взяты Onest (гротеск) и JetBrains Mono (моно) — обе с кириллицей;
+ *   - сигнальный цвет один и тот же с 3D-станцией, чтобы сайт и сцена
+ *     говорили на одном языке, а не выглядели двумя разными продуктами;
+ *   - цвета хранятся тройками RGB: так один токен работает и как цвет,
+ *     и как полупрозрачная заливка через rgb(var(--x) / .12).
+ */
+
+/* ── Цвет ─────────────────────────────────────────────────────────────── */
+:root {
+  --dark: 26 28 28;            /* #1A1C1C — холст */
+  --off-black: 17 19 19;       /* #111313 — секции на тон глубже */
+  --off-white: 249 244 235;    /* #F9F4EB — текст и светлые полосы */
+  --white: 255 255 255;
+
+  --signal: 89 214 192;        /* #59D6C0 — единственное действие, цвет станции */
+
+  /* Тинты разделов: по одному на категорию проектов, как чередование
+     цветных полос у первоисточника. Не для украшения — для узнавания. */
+  --tint-ai: 208 255 126;      /* #D0FF7E */
+  --tint-auto: 220 242 244;    /* #DCF2F4 */
+  --tint-bots: 255 198 218;    /* #FFC6DA */
+  --tint-dash: 231 93 96;      /* #E75D60 */
+  --tint-web: 198 186 255;     /* #C6BAFF */
+
+  --bg: rgb(var(--dark));
+  --bg-deep: rgb(var(--off-black));
+  --fg: rgb(var(--off-white));
+  --fg-muted: rgb(var(--off-white) / .58);
+  --fg-faint: rgb(var(--off-white) / .34);
+  --line: rgb(var(--off-white) / .14);
+  --line-strong: rgb(var(--off-white) / .28);
+}
+
+/* ── Сетка ────────────────────────────────────────────────────────────── */
+:root {
+  --cols: 6;
+  --grid-gap: .625rem;
+  --grid-margin: 1rem;
+}
+@media (min-width: 48rem) {
+  :root {
+    --cols: 12;
+    --grid-gap: 1.5rem;
+    --grid-margin: 2.5rem;
+  }
+}
+
+/* ── Отступы ──────────────────────────────────────────────────────────────
+   Механика первоисточника: не меньше N пикселей, дальше растёт как доля
+   ширины экрана при эталоне 1440. Заменяет половину медиазапросов. */
+:root {
+  --space-3xs: max(calc(4 / 16 * 1rem), calc(6 / 1440 * 100vw));
+  --space-2xs: max(calc(8 / 16 * 1rem), calc(12 / 1440 * 100vw));
+  --space-xs:  max(calc(12 / 16 * 1rem), calc(16 / 1440 * 100vw));
+  --space-sm:  max(calc(16 / 16 * 1rem), calc(24 / 1440 * 100vw));
+  --space-md:  max(calc(24 / 16 * 1rem), calc(32 / 1440 * 100vw));
+  --space-lg:  max(calc(32 / 16 * 1rem), calc(48 / 1440 * 100vw));
+  --space-xl:  max(calc(48 / 16 * 1rem), calc(64 / 1440 * 100vw));
+
+  --section-xs: max(calc(30 / 16 * 1rem), calc(60 / 1440 * 100vw));
+  --section-sm: max(calc(40 / 16 * 1rem), calc(80 / 1440 * 100vw));
+  --section-md: max(calc(60 / 16 * 1rem), calc(120 / 1440 * 100vw));
+  --section-lg: max(calc(80 / 16 * 1rem), calc(160 / 1440 * 100vw));
+  --section-xl: max(calc(100 / 16 * 1rem), calc(200 / 1440 * 100vw));
+}
+
+/* ── Типографика ──────────────────────────────────────────────────────────
+   Кегли и трекинг сняты с первоисточника. Дисплей уменьшен на ступень:
+   русское слово длиннее английского на треть, и 5rem с интерлиньяжем 0.8
+   на кириллице рвёт заголовок в кашу. */
+:root {
+  --font-sans: 'Onest', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+  --display-lg: clamp(2.75rem, 1.2rem + 3.4vw, 4.25rem);
+  --display-sm: clamp(2.25rem, 1.1rem + 2.6vw, 3.25rem);
+  --body-lg: clamp(1.25rem, .9375rem + .63vw, 1.5rem);
+  --body-md: clamp(1rem, .6875rem + .63vw, 1.25rem);
+  --body-rg: clamp(.875rem, .71875rem + .31vw, 1rem);
+  --body-sm: clamp(.75rem, .59375rem + .31vw, .875rem);
+  --label: clamp(.6875rem, .625rem + .12vw, .75rem);
+
+  --tracking: -.02em;
+  --lh-display: .86;   /* у первоисточника .8 — на кириллице выносные слипаются */
+  --lh-tight: 1.2;
+  --lh-body: 1.45;
+  --lh-loose: 1.55;
+}
+
+/* ── Форма ────────────────────────────────────────────────────────────── */
+:root {
+  --radius-xs: .25rem;
+  --radius-sm: .375rem;
+  --radius-pill: 9999px;
+  --border: 1px;
+}
+
+/* ── Движение ─────────────────────────────────────────────────────────── */
+:root {
+  --dur-micro: 160ms;
+  --dur-state: 220ms;
+  --dur-enter: 620ms;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in: cubic-bezier(.4, 0, 1, 1);
+  --stagger: 70ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-micro: 0ms; --dur-state: 0ms; --dur-enter: 0ms; --stagger: 0ms; }
+}
+
+/* ── Светлая полоса ───────────────────────────────────────────────────────
+   Приём первоисточника: страница не однотонная, а чередует тёмные и светлые
+   секции. Переключается не тема сайта, а переменные внутри блока — поэтому
+   вложенные компоненты подхватывают её автоматически. */
+.band-light {
+  --bg: rgb(var(--off-white));
+  --bg-deep: rgb(var(--white));
+  --fg: rgb(var(--dark));
+  --fg-muted: rgb(var(--dark) / .62);
+  --fg-faint: rgb(var(--dark) / .42);
+  --line: rgb(var(--dark) / .14);
+  --line-strong: rgb(var(--dark) / .3);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ── Переходы между страницами ────────────────────────────────────────────
+   Нативная замена Swup: браузер сам морфит документы, библиотека не нужна.
+   Без поддержки просто происходит обычный переход по ссылке. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+
+/* ── Появление при входе в экран ──────────────────────────────────────────
+   Конечное состояние — по умолчанию: без JS и без поддержки анимаций
+   содержимое видно сразу, а не остаётся невидимым навсегда. */
+.rise { opacity: 1; translate: none; }
+
+/* Сдвиг идёт через отдельное свойство translate, а не transform: иначе
+   .is-visible навсегда перебивает transform у карточек (hover, тилт). */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .rise {
+    opacity: 0;
+    translate: 0 18px;
+    transition:
+      opacity var(--dur-enter) var(--ease-out),
+      translate var(--dur-enter) var(--ease-out);
+    transition-delay: var(--rise-delay, 0ms);
+  }
+  html.js .rise.is-visible { opacity: 1; translate: none; }
+}
+
+/* ── Заголовок по словам ──────────────────────────────────────────────────
+   Слово — не буква: побуквенная разлётка на кириллице читается как шум. */
+.words > span {
+  display: inline-block;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.js .words > span {
+    opacity: 0;
+    transform: translateY(.5em);
+    transition:
+      opacity .8s var(--ease-out),
+      transform .8s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * var(--stagger));
+  }
+  html.js .words.is-visible > span { opacity: 1; transform: none; }
+}
+
+/* ── Компактная шапка ─────────────────────────────────────────────────────
+   Приём is-compact у первоисточника: при прокрутке шапка ужимается
+   и подкладывает фон, чтобы не спорить с контентом. */
+nav.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  background: rgba(7, 9, 14, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background-color var(--dur-state) var(--ease-out),
+              border-color var(--dur-state) var(--ease-out);
+}
+nav.top.is-compact {
+  background: rgba(7, 9, 14, 0.92);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.band-light nav.top.is-compact { background: rgb(var(--off-white) / .82); }
+
+/* ── Подчёркивание, которое растёт от курсора ─────────────────────────────
+   Дешёвая замена подчёркиванию: линия появляется слева направо. */
+.underline-grow {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size var(--dur-state) var(--ease-out);
+}
+.underline-grow:hover { background-size: 100% 1px; }
+
+/* На печати и при снимке всей страницы анимаций нет — контент должен быть. */
+@media print {
+  html.js .rise, html.js .words > span { opacity: 1; transform: none; }
+}
+
+/* Шапка над светлой полосой: инвертируется, иначе кремовое на кремовом. */
+nav.top.on-light { color: rgb(var(--dark)); }
+nav.top.on-light a { color: rgb(var(--dark)); }
+nav.top.on-light .links a { color: rgb(var(--dark) / .62); }
+nav.top.on-light .links a:last-child { color: rgb(var(--dark)); font-weight: 500; }
+nav.top.on-light.is-compact { background: rgb(var(--off-white) / .84); }

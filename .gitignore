@@ -12,3 +12,9 @@ app/static/uploads/*
 home.png
 .playwright-mcp/
 .claude/
+!app/static/uploads/cover-*.jpg
+
+# референсы дизайна в корне — не в репозиторий
+/*.jpeg
+/*.jpg
+/*.png

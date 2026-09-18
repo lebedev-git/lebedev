@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 {% set active = 'blog' %}
-{% block title %}Блог — {{ owner.name }}{% endblock %}
+{% block title %}Заметки — {{ owner.name }}{% endblock %}
 
 {% block content %}
-<section class="wrap" style="padding-top:56px">
-  <div class="label reveal">Заметки</div>
-  <h2 class="reveal">Блог</h2>
-  <p class="lead reveal">Мысли о работе, ИИ и автоматизации.</p>
+<div class="wrap">
+  <header class="hero">
+    <span class="rubric rise">Практика</span>
+    <h1 class="words rise">Заметки</h1>
+    <p class="lead rise">Как устроена работа: автоматизация, ИИ, инженерные решения.</p>
+  </header>
 
-  {% if posts %}
-  <div class="postlist">
-    {% for post in posts %}
-    <a class="postrow reveal" href="/blog/{{ post.slug }}">
-      <h3>{{ post.title }}</h3>
-      {% if post.excerpt %}<p class="excerpt">{{ post.excerpt }}</p>{% endif %}
-      <div class="date">{{ post.created_at[:10] }}</div>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="empty">Записи скоро появятся.</p>
-  {% endif %}
-</section>
+  <section>
+    {% if posts %}
+    <div class="index">
+      {% for post in posts %}
+      <a class="rise" href="/blog/{{ post.slug }}">
+        <span>{{ post.title }}</span>
+        <span class="type">{{ post.excerpt[:46] if post.excerpt }}</span>
+        <span class="year">{{ post.created_at[:10] }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Записи скоро появятся.</p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

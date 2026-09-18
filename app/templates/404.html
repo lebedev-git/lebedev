@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Не найдено — {{ owner.name }}{% endblock %}
+
 {% block content %}
-<section class="wrap" style="padding:120px 0;text-align:center">
-  <h1 style="font-size:64px;font-weight:800">404</h1>
-  <p class="lead" style="margin:12px auto 28px">Такой страницы нет.</p>
-  <a class="btn btn-primary" href="/">На главную</a>
-</section>
+<div class="wrap">
+  <header class="hero">
+    <span class="rubric">Ошибка 404</span>
+    <h1 class="words">Такой страницы нет</h1>
+    <p class="lead">Возможно, она переехала или ссылка устарела.</p>
+    <div class="actions">
+      <a class="cta" href="/">На главную</a>
+      <a class="ghost" href="/projects">К работам</a>
+    </div>
+  </header>
+</div>
 {% endblock %}

@@ -2,11 +2,13 @@
 from typing import Annotated
 
 from fastapi import FastAPI, Form, Request, UploadFile, File
-from fastapi.responses import HTMLResponse, RedirectResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from . import db
+from .covers import cover_svg
+from .icons import get_icon_svg
 from .auth import (
     COOKIE_NAME,
     check_password,
@@ -16,8 +18,8 @@ from .auth import (
     register_login_result,
     require_admin,
 )
-from .config import OWNER, STATIC_DIR, TEMPLATES_DIR
-from .content import ABOUT, EXPERIENCE, SKILLS, STATS
+from .config import OWNER, SITE_URL, STATIC_DIR, TEMPLATES_DIR
+from .content import ABOUT, EXPERIENCE, SERVICES, SKILLS, STATS
 from .seed import run as run_seed
 from .utils import save_upload, unique_slug
 
@@ -25,6 +27,35 @@ app = FastAPI(title="Портфолио · Андрей Лебедев")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 templates.env.globals["owner"] = OWNER
+templates.env.globals["cover_svg"] = cover_svg
+templates.env.globals["icon_svg"] = get_icon_svg
+templates.env.globals["asset_v"] = str(int(__import__("time").time()))  # сброс кэша статики на каждый запуск
+
+
+def plural(n: int, one: str, few: str, many: str) -> str:
+    """2 внедрения, 5 внедрений, 21 внедрение."""
+    n = abs(n) % 100
+    if 11 <= n <= 19:
+        return many
+    n %= 10
+    return one if n == 1 else few if 2 <= n <= 4 else many
+
+
+templates.env.globals["plural"] = plural
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    resp = await call_next(request)
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    return resp
+
+
+def site_url(request: Request) -> str:
+    """Абсолютный адрес сайта для og:image, canonical и sitemap."""
+    return SITE_URL or str(request.base_url).rstrip("/")
 
 
 @app.on_event("startup")
@@ -34,50 +65,59 @@ def _startup() -> None:
 
 
 def render(request: Request, name: str, status_code: int = 200, **ctx) -> HTMLResponse:
+    ctx.setdefault("site_url", site_url(request))
     return templates.TemplateResponse(
         request=request, name=name, context=ctx, status_code=status_code
     )
 
 
+@app.get("/robots.txt", include_in_schema=False)
+def robots(request: Request):
+    return PlainTextResponse(
+        f"User-agent: *\nDisallow: /admin\nSitemap: {site_url(request)}/sitemap.xml\n"
+    )
+
+
+@app.get("/sitemap.xml", include_in_schema=False)
+def sitemap(request: Request):
+    base = site_url(request)
+    paths = ["/", "/about", "/experience", "/blog"] + [f"/blog/{p['slug']}" for p in db.list_posts()]
+    urls = "".join(f"<url><loc>{base}{p}</loc></url>" for p in paths)
+    xml = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>'
+    return Response(xml, media_type="application/xml")
+
+
 @app.get("/favicon.ico", include_in_schema=False)
-def favicon() -> Response:
-    # Пустой ответ вместо 404 (убирает ошибку в консоли).
+def favicon():
+    fav = STATIC_DIR / "favicon.ico"
+    if fav.exists():
+        return FileResponse(fav, media_type="image/x-icon")
     return Response(status_code=204)
 
 
 # ── Публичные страницы ───────────────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+    items = db.list_projects()
+    sections = ["AI-продукты", "Автоматизация", "Telegram-боты", "Дашборды", "Веб"]
+    tag_counts = {}
+    for p in items:
+        cat = p["tags"].split(",")[0].strip() if p["tags"] else ""
+        if cat:
+            tag_counts[cat] = tag_counts.get(cat, 0) + 1
+    tags = [s for s in sections if s in tag_counts]
     return render(
         request, "index.html",
-        featured=db.list_projects(only_featured=True),
-        stats=STATS,
-        skills=SKILLS,
+        projects=items,
+        sections=tags,
+        tag_counts=tag_counts,
+        about=ABOUT,
     )
 
 
 @app.get("/projects", response_class=HTMLResponse)
 def projects(request: Request):
-    items = db.list_projects()
-    # Фиксированные разделы (первый тег каждой карточки = её раздел)
-    sections = ["AI-продукты", "Автоматизация", "Telegram-боты", "Дашборды", "Веб"]
-    present = {p["tags"].split(",")[0].strip() for p in items}
-    tags = [s for s in sections if s in present]
-    return render(request, "projects.html", projects=items, tags=tags)
-
-
-@app.get("/projects/{slug}", response_class=HTMLResponse)
-def project_detail(request: Request, slug: str):
-    proj = db.get_project(slug)
-    if not proj:
-        return render(request, "404.html", status_code=404)
-    return render(request, "project.html", p=proj)
-
-
-@app.get("/scene", response_class=HTMLResponse)
-def scene(request: Request):
-    """Прототип пространственной сцены: зона проектов на серой коробке."""
-    return render(request, "scene.html", projects=db.list_projects())
+    return RedirectResponse("/", status_code=303)
 
 
 @app.get("/about", response_class=HTMLResponse)

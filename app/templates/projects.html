@@ -1,43 +1,38 @@
 {% extends "base.html" %}
 {% set active = 'projects' %}
 {% block title %}Проекты — {{ owner.name }}{% endblock %}
+{% block description %}Работы {{ owner.name }}: AI-продукты, автоматизация, Telegram-боты, дашборды, веб.{% endblock %}
 
 {% block content %}
-<section class="wrap" style="padding-top:56px">
-  <div class="label reveal">Портфолио</div>
-  <h2 class="reveal">Проекты и кейсы</h2>
-  <p class="lead reveal">Что делал и что получилось. Фильтруй по направлению.</p>
+<div class="wrap">
+  <header class="hero">
+    <span class="rubric rise">Портфолио</span>
+    <h1 class="words rise">Работы</h1>
+    <p class="lead rise">Что делал и что получилось. Раздел проекта — его основное направление.</p>
 
-  {% if tags %}
-  <div class="filters reveal">
-    <button class="filter active" data-tag="all">Все</button>
-    {% for t in tags %}<button class="filter" data-tag="{{ t }}">{{ t }}</button>{% endfor %}
-  </div>
-  {% endif %}
+    {% if tags %}
+    <div class="filters rise">
+      <button class="filter active" data-tag="all">Все · {{ projects|length }}</button>
+      {% for t in tags %}<button class="filter" data-tag="{{ t }}">{{ t }}</button>{% endfor %}
+    </div>
+    {% endif %}
+  </header>
 
-  {% if projects %}
-  <div class="pcards">
-    {% for p in projects %}
-    <a class="pcard reveal" href="/projects/{{ p.slug }}" data-tags="{{ p.tags }}">
-      <div class="cover">
-        {% if p.cover_image %}<img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" />{% else %}<span class="ph">{{ p.title[0]|upper }}</span>{% endif %}
-      </div>
-      <div class="body">
-        <h3>{{ p.title }}</h3>
-        <p class="summary">{{ p.summary }}</p>
-        <div class="tags">
-          {% for t in p.tags.split(',') if t.strip() %}<span class="tag">{{ t.strip() }}</span>{% endfor %}
-        </div>
-        <div class="meta-row">
-          {% if p.role %}<span>{{ p.role }}</span>{% endif %}
-          {% if p.year %}<span>{{ p.year }}</span>{% endif %}
-        </div>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="empty">Проекты скоро появятся.</p>
-  {% endif %}
-</section>
+  <section>
+    {% if projects %}
+    <div class="index">
+      {% for p in projects %}
+      <a class="rise" href="{{ p.link }}" target="_blank" rel="noopener" data-tags="{{ p.tags }}">
+        <span>{{ p.title }}</span>
+        <span class="type">{{ p.tags.split(',')[0] }}</span>
+        <span class="year">{{ p.year }}</span>
+        <span class="thumb" aria-hidden="true">{{ cover_svg(p, 320, 200)|safe }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Проекты скоро появятся.</p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

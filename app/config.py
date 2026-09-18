@@ -15,6 +15,8 @@ DB_PATH = BASE_DIR / "data.db"
 
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 SECRET_KEY = os.getenv("SECRET_KEY", "")
+# Абсолютный адрес сайта для og:image и sitemap. Пусто — берётся из запроса.
+SITE_URL = os.getenv("SITE_URL", "").rstrip("/")
 
 # Fail-fast: не стартуем с пустыми/дефолтными секретами.
 # Для осознанного локального запуска без .env — ALLOW_INSECURE=1.

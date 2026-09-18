@@ -3,40 +3,39 @@
 {% block title %}Опыт и навыки — {{ owner.name }}{% endblock %}
 
 {% block content %}
-<section class="wrap" style="padding-top:56px">
-  <div class="label reveal">Мой путь</div>
-  <h2 class="reveal">Опыт работы</h2>
-  <div class="timeline">
-    {% for e in experience %}
-    <div class="tl reveal">
-      <div class="when">{{ e.when }}</div>
-      <h3>{{ e.title }}</h3>
-      <div class="org">{{ e.org }}</div>
-      <ul>{% for pt in e.points %}<li>{{ pt }}</li>{% endfor %}</ul>
+<div class="wrap">
+  <header class="hero">
+    <span class="rubric rise">Мой путь</span>
+    <h1 class="words rise">Опыт</h1>
+    <div class="stats rise">
+      {% for s in stats %}<div><b>{{ s.num }}</b><span>{{ s.cap }}</span></div>{% endfor %}
     </div>
-    {% endfor %}
-  </div>
-</section>
+  </header>
 
-<section class="wrap">
-  <div class="label reveal">Достижения</div>
-  <div class="stats">
-    {% for s in stats %}
-    <div class="stat reveal"><div class="num">{{ s.num }}</div><div class="cap">{{ s.cap }}</div></div>
-    {% endfor %}
-  </div>
-</section>
-
-<section class="wrap">
-  <div class="label reveal">Компетенции</div>
-  <h2 class="reveal">Навыки и инструменты</h2>
-  <div class="skills">
-    {% for sk in skills %}
-    <div class="skillcard reveal">
-      <h4>{{ sk.group }}</h4>
-      <div class="items">{% for i in sk['items'] %}<span class="chip">{{ i }}</span>{% endfor %}</div>
+  <section>
+    <div class="section-head"><span class="rubric">Работа</span></div>
+    <div class="timeline">
+      {% for e in experience %}
+      <div class="tl rise">
+        <div class="when">{{ e.when }}</div>
+        <h3>{{ e.title }}</h3>
+        <div class="org">{{ e.org }}</div>
+        <ul>{% for pt in e.points %}<li>{{ pt }}</li>{% endfor %}</ul>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-</section>
+  </section>
+
+  <section>
+    <div class="section-head"><span class="rubric">Навыки и инструменты</span></div>
+    <div class="cards">
+      {% for sk in skills %}
+      <div class="card rise">
+        <h3>{{ sk.group }}</h3>
+        <div class="chips">{% for i in sk['items'] %}<span class="chip">{{ i }}</span>{% endfor %}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
 {% endblock %}

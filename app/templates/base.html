@@ -1,42 +1,84 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="no-js">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{% block title %}{{ owner.name }} — {{ owner.role }}{% endblock %}</title>
-<meta name="description" content="{% block description %}{{ owner.name }} — AI Automation Engineer и руководитель проектов. Превращаю идеи и рутину в работающие системы на базе ИИ.{% endblock %}" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="stylesheet" href="/static/css/styles.css" />
+<meta name="description" content="{% block description %}{{ owner.name }} — AI Automation Engineer. Превращаю рутину и сложные данные в автономные системы без участия человека.{% endblock %}" />
+<meta name="theme-color" content="#07090E" />
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+<!-- OpenGraph / Telegram Preview -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ owner.name }}" />
+<meta property="og:title" content="{% block og_title %}{{ owner.name }} — AI Automation & Digital Systems{% endblock %}" />
+<meta property="og:description" content="{% block og_description %}Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ. Команда резидента ИТ-парка.{% endblock %}" />
+<meta property="og:url" content="{{ site_url }}{{ request.url.path }}" />
+<link rel="canonical" href="{{ site_url }}{{ request.url.path }}" />
+<meta property="og:image" content="{{ site_url }}{% block og_image %}/static/og-image.png{% endblock %}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{% block twitter_title %}{{ owner.name }} — AI Automation & Digital Systems{% endblock %}" />
+<meta name="twitter:description" content="{% block twitter_description %}Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ.{% endblock %}" />
+<meta name="twitter:image" content="{{ site_url }}{% block twitter_image %}/static/og-image.png{% endblock %}" />
+
+<!-- Класс ставится до отрисовки: иначе анимируемые блоки успевают моргнуть
+     конечным состоянием, прежде чем скрипт их спрячет. -->
+<script>document.documentElement.classList.replace("no-js", "js")</script>
+<link rel="preload" href="/static/fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/static/css/fonts.css?v={{ asset_v }}" />
+<link rel="stylesheet" href="/static/css/core.css?v={{ asset_v }}" />
+<link rel="stylesheet" href="/static/css/site.css?v={{ asset_v }}" />
 </head>
 <body>
-  <nav class="nav">
-    <div class="wrap nav-inner">
-      <a href="/" class="brand"><span>Андрей Лебедев</span></a>
-      <button class="burger" aria-label="Меню">☰</button>
-      <div class="nav-links">
-        <a href="/projects" class="{{ 'active' if active=='projects' }}">Проекты</a>
-        <a href="/about" class="{{ 'active' if active=='about' }}">Обо мне</a>
-        <a href="/experience" class="{{ 'active' if active=='experience' }}">Опыт</a>
-        <a href="/blog" class="{{ 'active' if active=='blog' }}">Блог</a>
-        <a href="{{ owner.telegram_url }}" target="_blank" rel="noopener">Связаться</a>
+<div class="bg-blueprint-grid" aria-hidden="true"></div>
+<div id="toast-notify" class="toast-popup" aria-live="polite"></div>
+
+<nav class="top">
+  <div class="wrap nav-inner">
+    <div class="brand-group">
+      <a href="/" class="brand">
+        <span class="brand-name">{{ owner.name }}</span>
+        <span class="brand-role">AI Automation</span>
+      </a>
+      <div class="nav-resident-badge" title="Официальный резидент ИТ-парка">
+        <span class="pulse-beacon"></span>
+        <span>Резидент ИТ-парка</span>
       </div>
     </div>
-  </nav>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="nav-links">Меню</button>
+    <div class="links" id="nav-links">
+      <a href="/#stack">Навыки</a>
+      <a href="/#projects">Проекты</a>
+      <a href="/#contact">Контакты</a>
+      <a href="{{ owner.telegram_url }}" class="hire" target="_blank" rel="noopener">Написать в Telegram ↗</a>
+    </div>
+  </div>
+</nav>
 
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+<main>
+  {% block content %}{% endblock %}
+</main>
 
-  <footer>
-    <div class="wrap footer-inner">
-      <span>© 2026 {{ owner.name }}</span>
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <span>© 2026 {{ owner.name }} · {{ owner.city }}</span>
       <span>
         <a href="{{ owner.telegram_url }}" target="_blank" rel="noopener">Telegram</a> ·
         <a href="tel:{{ owner.phone_href }}">{{ owner.phone }}</a>
       </span>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script src="/static/js/main.js"></script>
+<script type="module" src="/static/js/motion.js?v={{ asset_v }}"></script>
+<script type="module" src="/static/js/filter.js?v={{ asset_v }}"></script>
 </body>
 </html>
