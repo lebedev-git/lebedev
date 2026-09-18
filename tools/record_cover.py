@@ -30,15 +30,14 @@ def orbit(page, x0, y0, x1, y1, steps=40, pause=0.02):
 
 
 def mayak(page):
-    """Стол мастера: клик по предмету — камера подлетает, Esc — назад."""
+    """Стол мастера: фокус на поле — подлёт камеры к полю, пауза, назад."""
     page.wait_for_timeout(9000)                      # предметы раскладываются на стол
-    for x, y in ((640, 460), (600, 215), (235, 440), (1045, 460)):
-        page.mouse.move(x, y, steps=12)
-        page.wait_for_timeout(500)
-        page.mouse.click(x, y)
-        page.wait_for_timeout(2600)
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(1600)
+    page.mouse.move(640, 460, steps=14)              # к полю
+    page.wait_for_timeout(700)
+    page.mouse.click(640, 460)                       # камера подлетает к полю
+    page.wait_for_timeout(4200)
+    page.keyboard.press("Escape")                    # общий вид
+    page.wait_for_timeout(2400)
 
 
 def eng(page):
@@ -68,9 +67,24 @@ def x7(page):
 
 X7_TABS = ["/", "/analytics", "/deals"]  # дашборд, графики, карточки сделок; выплаты — таблица, скучно
 
+
+def zvezda(page):
+    """ЗВЕЗДА: переключение уровней зрелости от хаоса к проактивности, потом ПУСК."""
+    page.wait_for_timeout(4000)
+    for label in ("0", "+1", "+2", "+3", "+4"):
+        btn = page.get_by_role("button", name=label, exact=True)
+        if btn.count():
+            btn.first.click()
+            page.wait_for_timeout(1300)
+    start = page.get_by_text("ПУСК")
+    if start.count():
+        start.first.click()
+        page.wait_for_timeout(3000)
+
+
 # Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
-SCENARIOS = {"mayak": mayak, "english-path": eng, "x7-invest": x7}
-KEEP = {"mayak": 19.0, "english-path": 10.0, "x7-invest": 10.0}  # сколько последних секунд оставить
+SCENARIOS = {"mayak": mayak, "english-path": eng, "x7-invest": x7, "zvezda": zvezda}
+KEEP = {"mayak": 10.0, "english-path": 10.0, "x7-invest": 10.0, "zvezda": 10.0}  # сколько последних секунд оставить
 
 
 AUTH = ROOT / ".auth"  # сессии закрытых приложений; в .gitignore
