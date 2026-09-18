@@ -766,7 +766,7 @@ footer { padding-block: var(--section-sm); margin-top: var(--section-sm); }
 }
 
 .project-title {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
