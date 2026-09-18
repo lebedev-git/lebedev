@@ -17,7 +17,6 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "app" / "static" / "uploads"
 W, H = 1280, 800  # 16:10 — как обложка карточки 640×400
-DURATION_KEEP = 19.0  # сколько последних секунд прогона оставить в ролике
 
 
 def orbit(page, x0, y0, x1, y1, steps=40, pause=0.02):
@@ -42,7 +41,25 @@ def mayak(page):
         page.wait_for_timeout(1600)
 
 
-SCENARIOS = {"mayak": mayak}
+def eng(page):
+    """English Path: прогулка по разделам — клик по пунктам меню, скролл."""
+    page.wait_for_timeout(2500)
+    links = page.locator("nav a, header a").filter(has_not_text="")
+    hrefs = []
+    for i in range(links.count()):
+        href = links.nth(i).get_attribute("href") or ""
+        if href.startswith("/") and href not in hrefs and href != "/":
+            hrefs.append(href)
+    for href in hrefs[:4]:
+        page.mouse.wheel(0, 500); page.wait_for_timeout(700)
+        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + href, wait_until="networkidle")
+        page.wait_for_timeout(1400)
+    page.mouse.wheel(0, 700); page.wait_for_timeout(1200)
+
+
+# Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
+SCENARIOS = {"mayak": mayak, "english-path": eng}
+KEEP = {"mayak": 19.0, "english-path": 10.0}  # сколько последних секунд оставить
 
 
 def main(slug: str, url: str) -> None:
@@ -63,7 +80,7 @@ def main(slug: str, url: str) -> None:
         page.goto(url, wait_until="networkidle")
         SCENARIOS[slug](page)
         # видео пишется с открытия вкладки: белый экран и загрузку отрезаем
-        ss = f"{max(time.time() - t0 - DURATION_KEEP, 0):.1f}"
+        ss = f"{max(time.time() - t0 - KEEP[slug], 0):.1f}"
         ctx.close()
         browser.close()
     raw = next(tmp.glob("*.webm"))
