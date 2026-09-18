@@ -61,25 +61,19 @@ function cols() {
   return Math.max(24, Math.floor((term.clientWidth - 32) / w));
 }
 
-const hint = () => line('ожидаю команду · напиши help', 'dim');
+const MENU = [['matrix', 'дождь'], ['sl', 'поезд'], ['coffee', 'перерыв'],
+  ['rm -rf routine', 'удалить рутину'], ['sudo hire', 'нанять'], ['ls', 'проекты'], ['clear', 'очистить']];
+
+/** Меню команд; первая строка выделена, её же подставляем в ввод. */
+function menu() {
+  MENU.forEach(([c, d]) => { line(`${c.padEnd(16)} ${d}`, 'dim').dataset.cmd = c; });
+  pick = 0;
+  input.value = MENU[0][0];
+  highlightRow();
+}
 
 // ── Команды ──────────────────────────────────────────────────────────────────
 const CMDS = {
-  help() {
-    line('команды:', 'cmd');
-    [['yes', 'соглашаться со всем'], ['sl', 'поезд'], ['matrix', 'дождь'],
-     ['coffee', 'перерыв'], ['rm -rf routine', 'удалить рутину'], ['sudo hire', 'нанять'],
-     ['whoami', 'кто здесь'], ['ls', 'проекты'], ['clear', 'очистить']]
-      .forEach(([c, d]) => { line(`  ${c.padEnd(16)} ${d}`, 'dim').dataset.cmd = c; });
-  },
-
-  async yes() {
-    const n = REDUCED ? 3 : 14;
-    for (let i = 0; i < n; i++) { line('да'); await sleep(REDUCED ? 0 : 70); }
-    line('^C', 'ok');
-    line('[agent] ладно, понял. автоматизирую всё.', 'claude');
-  },
-
   async sl() {
     const train = [
       '        ____      ',
@@ -160,10 +154,6 @@ const CMDS = {
     link(TG.replace(/^https?:\/\//, ''), TG, '→ ');
   },
 
-  whoami() {
-    line('андрей лебедев · ai automation engineer · резидент ит-парка', 'claude');
-  },
-
   ls() {
     const cards = [...document.querySelectorAll('.project-card')];
     if (!cards.length) { line('пусто', 'dim'); return; }
@@ -173,10 +163,10 @@ const CMDS = {
     });
   },
 
-  clear() { term.replaceChildren(); hint(); },
+  clear() { term.replaceChildren(); menu(); },
 };
 
-const ALIAS = { да: 'yes', y: 'yes', кофе: 'coffee', help: 'help', '?': 'help', h: 'help', поезд: 'sl', train: 'sl' };
+const ALIAS = { кофе: 'coffee', поезд: 'sl', train: 'sl' };
 
 async function run(raw) {
   const cmd = raw.trim();
@@ -187,7 +177,7 @@ async function run(raw) {
   if (fn) { await fn(cmd); return; }
   line(`command not found: ${word}`, 'n8n');
   const near = Object.keys(CMDS).find((k) => k.startsWith(word[0]));
-  line(near ? `может, ${near}? или help` : 'попробуй help', 'dim');
+  line(near ? `может, ${near}?` : 'команды — стрелками ↑/↓', 'dim');
 }
 
 // ── Ввод ─────────────────────────────────────────────────────────────────────
@@ -197,7 +187,6 @@ form.addEventListener('submit', async (e) => {
   const value = input.value;
   input.value = '';
   setGhost();
-  pick = -1;
   busy = true;
   try { await run(value); } finally { busy = false; }
 });
@@ -205,7 +194,7 @@ form.addEventListener('submit', async (e) => {
 // ── Подсказка и выбор команды ────────────────────────────────────────────────
 // Ввёл первые буквы — серым дописывается остаток, Tab или → принимает.
 // ↑/↓ листают список команд прямо в строке ввода, Enter запускает.
-const COMMANDS = ['help', 'yes', 'sl', 'matrix', 'coffee', 'rm -rf routine', 'sudo hire', 'whoami', 'ls', 'clear'];
+const COMMANDS = MENU.map(([c]) => c);
 const ghost = document.getElementById('term-ghost');
 let pick = -1;
 
@@ -232,7 +221,7 @@ function highlightRow() {
   });
 }
 
-input.addEventListener('input', () => { pick = -1; setGhost(); });
+input.addEventListener('input', () => { setGhost(); highlightRow(); });
 
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Tab' || (e.key === 'ArrowRight' && input.selectionStart === input.value.length)) {
@@ -259,4 +248,4 @@ term.closest('.hero-terminal').addEventListener('click', (e) => {
   input.focus({ preventScroll: true });
 });
 
-hint();
+menu();
