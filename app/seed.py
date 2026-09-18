@@ -78,7 +78,7 @@ SEED_PROJECTS = [
             "карточки слов и фраз, расписание повторов, статистика прогресса.\n\n"
             "Стек: Next.js, TypeScript. Роль: фулстек — фронтенд, бэкенд, деплой."
         ),
-        "cover_image": "",
+        "cover_image": "cover-english-path.jpg",
         "tags": "Веб, Next.js, TypeScript, обучение",
         "role": "Фулстек-разработчик",
         "year": "2026",

@@ -41,19 +41,19 @@ def mayak(page):
 
 
 def eng(page):
-    """English Path: прогулка по разделам — клик по пунктам меню, скролл."""
-    page.wait_for_timeout(2500)
-    links = page.locator("nav a, header a").filter(has_not_text="")
-    hrefs = []
-    for i in range(links.count()):
-        href = links.nth(i).get_attribute("href") or ""
-        if href.startswith("/") and href not in hrefs and href != "/":
-            hrefs.append(href)
-    for href in hrefs[:4]:
-        page.mouse.wheel(0, 500); page.wait_for_timeout(700)
-        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + href, wait_until="domcontentloaded")
-        page.wait_for_timeout(1400)
-    page.mouse.wheel(0, 700); page.wait_for_timeout(1200)
+    """English Path: главная с планом дня → карточка повторения → тексты → грамматика."""
+    origin = page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2]
+    page.wait_for_timeout(2200)
+    page.mouse.wheel(0, 350); page.wait_for_timeout(900)
+    page.goto(origin + "/review", wait_until="domcontentloaded")
+    page.wait_for_timeout(1400)
+    show = page.get_by_text("Показать перевод")
+    if show.count():
+        show.first.click(); page.wait_for_timeout(1300)
+    page.goto(origin + "/reading", wait_until="domcontentloaded")
+    page.wait_for_timeout(2000)
+    page.goto(origin + "/grammar", wait_until="domcontentloaded")
+    page.wait_for_timeout(2200)
 
 
 def x7(page):
