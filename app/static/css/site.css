@@ -739,6 +739,7 @@ footer { padding-block: var(--section-sm); margin-top: var(--section-sm); }
 }
 
 .project-cover img,
+.project-cover video,
 .project-cover svg {
   width: 100%;
   height: 100%;

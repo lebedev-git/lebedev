@@ -13,6 +13,7 @@ home.png
 .playwright-mcp/
 .claude/
 !app/static/uploads/cover-*.jpg
+!app/static/uploads/cover-*.mp4
 
 # референсы дизайна в корне — не в репозиторий
 /*.jpeg

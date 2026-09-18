@@ -18,7 +18,7 @@ from .auth import (
     register_login_result,
     require_admin,
 )
-from .config import OWNER, SITE_URL, STATIC_DIR, TEMPLATES_DIR
+from .config import OWNER, SITE_URL, STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR
 from .content import ABOUT, EXPERIENCE, SERVICES, SKILLS, STATS
 from .seed import run as run_seed
 from .utils import save_upload, unique_slug
@@ -106,9 +106,12 @@ def home(request: Request):
         if cat:
             tag_counts[cat] = tag_counts.get(cat, 0) + 1
     tags = [s for s in sections if s in tag_counts]
+    # Живая обложка: tools/record_cover.py кладёт cover-<slug>.mp4 рядом с картинкой.
+    video_covers = {p["slug"] for p in items if (UPLOADS_DIR / f"cover-{p['slug']}.mp4").exists()}
     return render(
         request, "index.html",
         projects=items,
+        video_covers=video_covers,
         sections=tags,
         tag_counts=tag_counts,
         about=ABOUT,

@@ -130,7 +130,10 @@
       <a class="project-card rise" {% if p.link %}href="{{ p.link }}" target="_blank" rel="noopener"{% endif %} data-tags="{{ p.tags }}" data-category="{{ first_tag }}">
         <div class="project-cover-frame">
           <div class="project-cover">
-            {% if p.cover_image %}
+            {% if p.slug in video_covers %}
+            <video src="/static/uploads/cover-{{ p.slug }}.mp4" autoplay muted loop playsinline preload="metadata"
+                   {% if p.cover_image %}poster="/static/uploads/{{ p.cover_image }}"{% endif %} aria-label="{{ p.title }}"></video>
+            {% elif p.cover_image %}
             <img src="/static/uploads/{{ p.cover_image }}" alt="{{ p.title }}" loading="lazy" />
             {% else %}
             {{ cover_svg(p, 640, 400)|safe }}
