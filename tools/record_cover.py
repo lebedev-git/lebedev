@@ -57,15 +57,46 @@ def eng(page):
 
 
 def x7(page):
-    """X7 Invest: закрытое приложение, сессия из .auth. Пройти по вкладкам."""
-    page.wait_for_timeout(2500)
-    for path in X7_TABS:
-        page.goto(page.url.split("/", 3)[0] + "//" + page.url.split("/", 3)[2] + path, wait_until="domcontentloaded")
-        page.wait_for_timeout(600)
-        page.mouse.wheel(0, 400); page.wait_for_timeout(1400)
+    """X7 Invest: закрытое приложение, сессия из .auth. Вкладки — кликами по
+    боковому меню внутри SPA, без перезагрузки страницы: иначе между экранами
+    мелькает скелетон загрузки."""
+    page.wait_for_timeout(5500)                      # загрузка данных остаётся за кадром
+    page.mouse.wheel(0, 300); page.wait_for_timeout(1200)
+    for label in X7_TABS:
+        item = page.get_by_role("link", name=label, exact=True)
+        if not item.count():
+            continue
+        item.first.click()
+        page.wait_for_timeout(900)
+        page.mouse.wheel(0, 350); page.wait_for_timeout(1500)
 
 
-X7_TABS = ["/", "/analytics", "/deals"]  # дашборд, графики, карточки сделок; выплаты — таблица, скучно
+X7_TABS = ["Аналитика", "Сделки"]  # дашборд уже на экране; выплаты — таблица, скучно
+
+
+def mayak_oko(page):
+    """Тренажёр МАЯК: заполнить поля М-А-Я-К и О-К-О, создать запрос, показать промт."""
+    page.wait_for_timeout(2000)
+    fields = [
+        ("Миссия", "Составить план внедрения ИИ-ассистента в отдел продаж"),
+        ("Аудитория", "Руководитель отдела и менеджеры"),
+        ("Роль", "Консультант по автоматизации бизнес-процессов"),
+        ("Критерии", "Конкретный, пошаговый, реалистичный по срокам"),
+        ("Ограничения", "Не больше 10 шагов, срок 3 месяца"),
+        ("Контекст", "Компания 50 человек, CRM уже есть"),
+        ("Оформление", "Таблица: шаг, ответственный, срок"),
+    ]
+    for label, text in fields:
+        box = page.get_by_placeholder(label, exact=False)
+        if not box.count():
+            continue
+        box.first.click()
+        box.first.type(text, delay=12)
+        page.wait_for_timeout(150)
+    btn = page.get_by_text("Создать запрос")
+    if btn.count():
+        btn.first.click()
+    page.wait_for_timeout(2600)
 
 
 def zvezda(page):
@@ -83,8 +114,8 @@ def zvezda(page):
 
 
 # Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
-SCENARIOS = {"mayak": mayak, "english-path": eng, "x7-invest": x7, "zvezda": zvezda}
-KEEP = {"mayak": 10.0, "english-path": 10.0, "x7-invest": 10.0, "zvezda": 10.0}  # сколько последних секунд оставить
+SCENARIOS = {"mayak": mayak_oko, "mayak-3d": mayak, "english-path": eng, "x7-invest": x7, "zvezda": zvezda}
+KEEP = {"mayak": 10.0, "mayak-3d": 10.0, "english-path": 10.0, "x7-invest": 10.0, "zvezda": 10.0}  # сколько последних секунд оставить
 
 
 AUTH = ROOT / ".auth"  # сессии закрытых приложений; в .gitignore

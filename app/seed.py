@@ -30,6 +30,25 @@ SEED_PROJECTS = [
     },
 
     {
+        "title": "МАЯК 3D — фиджитал-тренажёр",
+        "slug": "mayak-3d",
+        "summary": "Интерактивная 3D-визуализация стола мастера: поле, карты, жетоны и планшет игрока в браузере.",
+        "description": (
+            "Трёхмерная сцена тренажёра МАЯК: стол мастера с игровым полем, картами, жетонами "
+            "и планшетом игрока. Камера подлетает к предметам, каждый объект кликабелен и "
+            "поясняет свою роль в игре. Мост между настольным и цифровым форматом продукта.\n\n"
+            "Роль: 3D-сцена на three.js, модели и UX."
+        ),
+        "cover_image": "cover-mayak-3d.jpg",
+        "tags": "AI-продукты, 3D, обучение",
+        "role": "Разработчик цифровых продуктов",
+        "year": "2026",
+        "link": "https://rosdk.ru/mayak-guide-3d",
+        "featured": 1,
+        "sort_order": 2,
+    },
+
+    {
         "title": "ЗВЕЗДА — индекс цифровой зрелости",
         "slug": "zvezda",
         "summary": "Интерактивная модель цифровой зрелости: шесть лучей и шесть уровней, от «хаоса» до «проактивности».",
@@ -46,11 +65,11 @@ SEED_PROJECTS = [
         "year": "2026",
         "link": "https://rosdk.ru/zvezda-platform?level=1",
         "featured": 1,
-        "sort_order": 2,
+        "sort_order": 3,
     },
 
     {
-        "title": "X7 — инвестиционный портфель",
+        "title": "X7 Invest — инвестиционный портфель",
         "slug": "x7-invest",
         "summary": "SPA для ведения портфеля сделок: недвижимость, доли, займы, ЗПИФ. Аналитика доходности XIRR/MOIC/DPI.",
         "description": (
@@ -67,10 +86,10 @@ SEED_PROJECTS = [
         "year": "2026",
         "link": "https://syndicate-invest.ru",
         "featured": 1,
-        "sort_order": 2,
+        "sort_order": 4,
     },
     {
-        "title": "English Path — английский на повторениях",
+        "title": "English Path",
         "slug": "english-path",
         "summary": "Платформа изучения английского на интервальных повторениях: слова, карточки, прогресс.",
         "description": (
@@ -84,7 +103,7 @@ SEED_PROJECTS = [
         "year": "2026",
         "link": "https://eng.a-lebedev.ru",
         "featured": 1,
-        "sort_order": 3,
+        "sort_order": 5,
     },
 ]
 

@@ -768,9 +768,10 @@ footer { padding-block: var(--section-sm); margin-top: var(--section-sm); }
   font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.2;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
   color: #FFFFFF;
   margin: 0;
   flex: 1;
