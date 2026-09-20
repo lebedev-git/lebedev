@@ -30,14 +30,26 @@ def orbit(page, x0, y0, x1, y1, steps=40, pause=0.02):
 
 
 def mayak(page):
-    """Стол мастера: фокус на поле — подлёт камеры к полю, пауза, назад."""
+    """Стол мастера: поле крупно → переворот полотна на «МЫ» → ноутбук места игрока.
+
+    Переворот в сцене идёт 6,3 с (стол пустеет, потом полотно), поэтому пишем
+    с запасом и ускоряем на сборке — см. SPEED."""
     page.wait_for_timeout(9000)                      # предметы раскладываются на стол
-    page.mouse.move(640, 460, steps=14)              # к полю
-    page.wait_for_timeout(700)
     page.mouse.click(640, 460)                       # камера подлетает к полю
-    page.wait_for_timeout(4200)
+    page.wait_for_timeout(2600)
+    flip = page.get_by_role("button", name="Перевернуть", exact=False)
+    if flip.count():
+        flip.first.click()
+        page.wait_for_timeout(7200)                  # CLEAR_MS 1900 + FLIP_MS 4400
     page.keyboard.press("Escape")                    # общий вид
-    page.wait_for_timeout(2400)
+    page.wait_for_timeout(1800)
+    # Ноутбук места игрока стоит в дальнем левом углу и в стартовый кадр не влезает:
+    # поворачиваем стол к нему и подъезжаем.
+    orbit(page, 640, 400, 940, 440, steps=26, pause=0.016)
+    for _ in range(7):
+        page.mouse.wheel(0, -120)
+        page.wait_for_timeout(110)
+    page.wait_for_timeout(1800)
 
 
 def eng(page):
@@ -115,7 +127,9 @@ def zvezda(page):
 
 # Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
 SCENARIOS = {"mayak": mayak_oko, "mayak-3d": mayak, "english-path": eng, "x7-invest": x7, "zvezda": zvezda}
-KEEP = {"mayak": 10.0, "mayak-3d": 10.0, "english-path": 10.0, "x7-invest": 10.0, "zvezda": 10.0}  # сколько последних секунд оставить
+KEEP = {"mayak": 12.0, "mayak-3d": 17.0, "english-path": 13.0, "x7-invest": 13.0, "zvezda": 14.0}  # сколько последних секунд прогона взять
+# Ускорение на сборке: живой темп интерфейса для обложки слишком вялый.
+SPEED = {"mayak": 1.4, "mayak-3d": 1.8, "english-path": 1.4, "x7-invest": 1.4, "zvezda": 1.5}
 
 
 AUTH = ROOT / ".auth"  # сессии закрытых приложений; в .gitignore
@@ -183,10 +197,18 @@ def main(slug: str, url: str) -> None:
         browser.close()
     raw = next(tmp.glob("*.webm"))
     mp4 = OUT / f"cover-{slug}.mp4"
+    speed = SPEED.get(slug, 1.0)
     subprocess.run([
         "ffmpeg", "-y", "-ss", ss, "-i", str(raw),
-        "-vf", "scale=960:-2,fps=30", "-c:v", "libx264", "-preset", "slow", "-crf", "24",
+        "-vf", f"setpts=PTS/{speed},scale=960:-2,fps=30",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "24",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(mp4),
+    ], check=True, capture_output=True)
+    # Постер — первый кадр ролика: иначе при наведении картинка скачком меняется,
+    # а после ухода курсора карточка возвращается уже к другому изображению.
+    subprocess.run([
+        "ffmpeg", "-y", "-i", str(mp4), "-frames:v", "1", "-q:v", "3",
+        str(OUT / f"cover-{slug}.jpg"),
     ], check=True, capture_output=True)
     print(mp4, mp4.stat().st_size // 1024, "КБ")
 

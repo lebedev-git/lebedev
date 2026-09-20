@@ -111,9 +111,28 @@ if (indexList && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   });
 }
 
-// ── Видео-обложка играет только под курсором ─────────────────────────────────
-document.querySelectorAll('.project-card video').forEach((v) => {
-  const card = v.closest('.project-card');
-  card.addEventListener('pointerenter', () => { v.play().catch(() => {}); });
-  card.addEventListener('pointerleave', () => { v.pause(); });
-});
+// ── Видео-обложка ────────────────────────────────────────────────────────────
+// Мышь: играет под курсором, после ухода отматывается на первый кадр — иначе
+// карточка застывает на случайном кадре из середины ролика.
+// Тач: наведения нет, поэтому ролик играет, пока карточка на экране.
+{
+  const videos = [...document.querySelectorAll('.project-card video')];
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const play = (v) => v.play().catch(() => {});
+
+  if (canHover) {
+    videos.forEach((v) => {
+      const card = v.closest('.project-card');
+      card.addEventListener('pointerenter', () => play(v));
+      card.addEventListener('pointerleave', () => { v.pause(); v.currentTime = 0; });
+    });
+  } else if (videos.length) {
+    const seen = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) play(e.target);
+        else { e.target.pause(); e.target.currentTime = 0; }
+      });
+    }, { threshold: 0.5 });
+    videos.forEach((v) => seen.observe(v));
+  }
+}
