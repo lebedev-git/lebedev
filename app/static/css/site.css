@@ -1050,15 +1050,12 @@ footer { padding-block: var(--section-sm); margin-top: var(--section-sm); }
   color: #FFFFFF;
 }
 
-/* ── Hero: сетка «текст + терминал» ──────────────────────────────────── */
+/* ── Hero ─────────────────────────────────────────────────────────────── */
 .portfolio-hero { position: relative; isolation: isolate; }
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  gap: var(--space-md);
-  align-items: center;
+  grid-template-columns: 1fr;
 }
-@media (max-width: 58rem) { .hero-grid { grid-template-columns: 1fr; } }
 
 /* Аврора за заголовком: два пятна медленно дрейфуют. Только transform/opacity. */
 .portfolio-hero::before,
@@ -1084,67 +1081,6 @@ footer { padding-block: var(--section-sm); margin-top: var(--section-sm); }
 @keyframes aurora-a { to { transform: translate(6rem, 3rem) scale(1.12); } }
 @keyframes aurora-b { to { transform: translate(-5rem, -4rem) scale(0.9); } }
 
-/* ── Терминал-лог ─────────────────────────────────────────────────────── */
-.hero-terminal {
-  border-radius: 18px;
-  background: rgba(7, 9, 14, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 30px 60px -20px rgba(0, 0, 0, 0.8),
-              0 0 40px -12px rgb(var(--signal) / .25);
-  backdrop-filter: blur(10px);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  overflow: hidden;
-}
-.term-bar {
-  display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.6rem 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  color: var(--fg-faint);
-}
-.term-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.14); }
-.term-dot:first-child { background: rgba(255, 95, 86, 0.8); }
-.term-body { user-select: text; cursor: text; }
-.term-body {
-  margin: 0;
-  padding: 0.9rem 1rem 1rem;
-  height: 12.5rem;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.12) transparent;
-  line-height: 1.65;
-  color: var(--fg-muted);
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.term-body .ln[data-k="tg"]     { color: #2AABEE; }
-.term-body .ln[data-k="n8n"]    { color: #EA4B71; }
-.term-body .ln[data-k="claude"] { color: #D97706; }
-.term-body .ln[data-k="pg"]     { color: #7C9BFF; }
-.term-body .ln[data-k="ok"]     { color: rgb(var(--signal)); font-weight: 600; }
-.term-body .ln[data-k="cmd"]    { color: var(--fg); }
-.term-cursor {
-  display: inline-block; width: 0.55em; height: 1em;
-  background: rgb(var(--signal)); vertical-align: -0.15em;
-  animation: term-blink 1s steps(2) infinite;
-}
-@keyframes term-blink { to { opacity: 0; } }
-.term-body a { color: rgb(var(--signal)); text-decoration: underline; text-underline-offset: 3px; }
-.term-body .ln[data-k="dim"] { color: var(--fg-faint); }
-.term-input-row {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.55rem 1rem 0.7rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  cursor: text;
-}
-.term-prompt { color: rgb(var(--signal)); font-weight: 600; }
-#term-input {
-  flex: 1; min-width: 0;
-  background: none; border: 0; outline: 0; padding: 0;
-  font: inherit; color: var(--fg);
-  caret-color: rgb(var(--signal));
-}
-#term-input::placeholder { color: var(--fg-faint); }
 
 /* ── Спотлайт-бордер на карточках стека (переменные уже пишет filter.js) ── */
 .tech-card::before {
@@ -1182,7 +1118,6 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   .portfolio-hero::before, .portfolio-hero::after { animation: none; }
-  .term-cursor { animation: none; }
 }
 
 /* ── «Резидент ИТ-парка» в блоке контактов ───────────────────────────── */
@@ -1192,46 +1127,6 @@ body::after {
   font-family: var(--font-mono); font-size: 0.78rem; color: var(--fg-faint);
 }
 .cta-banner .cta-resident svg { width: 20px; height: 20px; color: var(--fg-muted); }
-
-/* ── Подсказка в строке ввода терминала ──────────────────────────────── */
-.term-field { position: relative; flex: 1; min-width: 0; display: flex; }
-.term-ghost {
-  position: absolute; inset: 0; display: flex; align-items: center;
-  color: var(--fg-faint); white-space: pre; pointer-events: none; overflow: hidden;
-}
-.term-ghost .typed { color: transparent; }
-.term-body .ln[data-cmd] { position: relative; padding-left: 1.2rem; cursor: pointer; }
-.term-body .ln[data-cmd]::before {
-  content: "▸"; position: absolute; left: 0; color: transparent;
-}
-.term-body .ln.is-pick { color: var(--fg); }
-.term-body .ln.is-pick::before { color: #FF5F56; }
-
-/* Эффекты терминала за пределами окна: слой поверх страницы, term.js убирает сам. */
-.term-fx { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
-/* Дождь — за содержимым, рядом с сеткой фона (.bg-blueprint-grid тоже z-index -1). */
-.term-fx-rain { z-index: -1; opacity: 0.75; }
-.term-fx-train {
-  inset: auto auto 6vh 0;
-  width: max-content;
-  margin: 0;
-  font: 15px/1.15 var(--font-mono);
-  color: #2AABEE;
-  text-shadow: 0 0 14px rgba(42, 171, 238, 0.55);
-  will-change: transform;
-}
-/* Слово «рутину» в подзаголовке: зачёркивается по мере удаления, потом гаснет. */
-.erased { position: relative; transition: opacity 0.6s; }
-.erased::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 56%;
-  height: 2px;
-  width: calc(var(--w, 0) * 100%);
-  background: #EA4B71;
-}
-.erased.gone { opacity: 0; }
 
 /* ── Навыки ───────────────────────────────────────────────────────────── */
 .skills-section { padding: var(--space-lg) 0 var(--space-xl); }

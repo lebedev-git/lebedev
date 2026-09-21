@@ -12,21 +12,6 @@
     </p>
     </div>
 
-    <!-- Терминал с пасхалками: команды в term.js -->
-    <aside class="hero-terminal rise" aria-label="Терминал">
-      <div class="term-bar">
-        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
-      </div>
-      <pre class="term-body" id="term-body" data-tg="{{ owner.telegram_url }}"></pre>
-      <form class="term-input-row" id="term-form" autocomplete="off">
-        <span class="term-prompt">$</span>
-        <span class="term-field">
-          <span class="term-ghost" id="term-ghost" aria-hidden="true"></span>
-          <input id="term-input" type="text" placeholder="matrix" aria-label="Команда терминала"
-                 autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
-        </span>
-      </form>
-    </aside>
     </div>
 
     <!-- Стек технологий в стиле Refero с официальными SVG -->
@@ -246,5 +231,4 @@
     </div>
   </section>
 </div>
-<script type="module" src="/static/js/term.js?v={{ asset_v }}"></script>
 {% endblock %}
