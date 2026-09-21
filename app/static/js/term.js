@@ -69,6 +69,7 @@ function menu() {
   MENU.forEach(([c, d]) => { line(`${c.padEnd(16)} ${d}`, 'dim').dataset.cmd = c; });
   pick = 0;
   input.value = MENU[0][0];
+  prefilled = true;
   highlightRow();
 }
 
@@ -319,6 +320,13 @@ function highlightRow() {
   });
 }
 
+// Подставленная команда (из меню или ↑/↓) — предложение, не ввод: первая
+// набранная буква заменяет её целиком, иначе получается «matrixsl».
+let prefilled = true;
+input.addEventListener('beforeinput', (e) => {
+  if (prefilled && e.inputType.startsWith('insert')) input.value = '';
+  prefilled = false;
+});
 input.addEventListener('input', () => { setGhost(); highlightRow(); });
 
 input.addEventListener('keydown', (e) => {
@@ -333,6 +341,7 @@ input.addEventListener('keydown', (e) => {
     const step = e.key === 'ArrowDown' ? 1 : -1;
     pick = (pick + step + COMMANDS.length) % COMMANDS.length;
     input.value = COMMANDS[pick];
+    prefilled = true;
     setGhost();
     highlightRow();
   }
