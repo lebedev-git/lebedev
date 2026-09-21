@@ -259,9 +259,3 @@ footer{margin-top:auto;border-top:1px solid var(--line);padding:26px 0;color:var
   section{padding:48px 0}
   .admin-table{display:block;overflow-x:auto}
 }
-
-/* Посещаемость в админке: крупные числа + таблица по дням */
-.stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
-.stat-box{flex:1 1 130px;padding:14px 16px;border:1px solid var(--line-strong);border-radius:12px}
-.stat-num{display:block;font-size:26px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
-.stat-cap{display:block;margin-top:4px;font-size:12px;color:var(--muted)}

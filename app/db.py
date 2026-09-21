@@ -22,13 +22,6 @@ CREATE TABLE IF NOT EXISTS project (
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE TABLE IF NOT EXISTS visit (
-    day     TEXT NOT NULL,              -- дата визита, YYYY-MM-DD
-    visitor TEXT NOT NULL,              -- хэш посетителя; сырой IP не храним
-    hits    INTEGER NOT NULL DEFAULT 1, -- просмотров страниц за этот день
-    PRIMARY KEY (day, visitor)
-);
-
 CREATE TABLE IF NOT EXISTS post (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     title       TEXT NOT NULL,
@@ -164,37 +157,3 @@ def count_rows() -> tuple[int, int]:
         p = cur.execute("SELECT COUNT(*) FROM project").fetchone()[0]
         b = cur.execute("SELECT COUNT(*) FROM post").fetchone()[0]
         return p, b
-
-
-# ── Посещаемость ───────────────────────────────────────────────────────────
-# Свой счётчик вместо внешней аналитики: ни одного запроса на сторону,
-# сырых IP в базе нет — только хэш, посчитанный на секрете приложения.
-def record_visit(visitor: str) -> None:
-    with db_cursor() as cur:
-        cur.execute(
-            "INSERT INTO visit (day, visitor, hits) VALUES (date('now'), ?, 1) "
-            "ON CONFLICT(day, visitor) DO UPDATE SET hits = hits + 1",
-            (visitor,),
-        )
-
-
-def visit_stats(days: int = 14) -> dict:
-    """Сводка для админки: сегодня, за неделю, за всё время и разбивка по дням."""
-    with db_cursor() as cur:
-        row = cur.execute(
-            """SELECT
-                 (SELECT COUNT(*) FROM visit WHERE day = date('now'))                       AS today_people,
-                 (SELECT IFNULL(SUM(hits), 0) FROM visit WHERE day = date('now'))           AS today_hits,
-                 (SELECT COUNT(*) FROM visit WHERE day = date('now', '-1 day'))             AS yesterday_people,
-                 (SELECT COUNT(DISTINCT visitor) FROM visit
-                    WHERE day >= date('now', '-6 days'))                                    AS week_people,
-                 (SELECT COUNT(DISTINCT visitor) FROM visit)                                AS total_people,
-                 (SELECT IFNULL(SUM(hits), 0) FROM visit)                                   AS total_hits,
-                 (SELECT MIN(day) FROM visit)                                               AS since"""
-        ).fetchone()
-        rows = cur.execute(
-            "SELECT day, COUNT(*) AS people, SUM(hits) AS hits FROM visit "
-            "WHERE day >= date('now', ?) GROUP BY day ORDER BY day DESC",
-            (f"-{days - 1} days",),
-        ).fetchall()
-    return {**dict(row), "days": rows}
