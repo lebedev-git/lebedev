@@ -1329,3 +1329,6 @@ body::after {
 .project-status.is-private .status-dot { background: #FF5F56; box-shadow: 0 0 8px #FF5F56; }
 .project-status.is-private .status-dot::after { display: none; }
 .project-status.is-private .status-text { color: #FF7B73; }
+.project-status.is-dev .status-dot { background: #FBBF24; box-shadow: 0 0 8px #FBBF24; }
+.project-status.is-dev .status-dot::after { border-color: #FBBF24; }
+.project-status.is-dev .status-text { color: #FCD34D; }

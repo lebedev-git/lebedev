@@ -129,12 +129,22 @@ def run() -> None:
     db.init_db()
     p_count, b_count = db.count_rows()
 
-    if p_count == 0:
-        for proj in SEED_PROJECTS:
+    # Проекты: этот список — источник правды, база синхронизируется по slug при каждом
+    # старте. Иначе на проде, где data.db уже есть, новые карточки не появятся.
+    # ponytail: правки проектов через админку на проде перезатрутся при рестарте —
+    # править их здесь, в коде.
+    seen = set()
+    for proj in SEED_PROJECTS:
+        seen.add(proj["slug"])
+        row = db.get_project(proj["slug"])
+        if row:
+            db.update_project(row["id"], proj)
+        else:
             db.create_project(proj)
-        print(f"[seed] добавлено проектов: {len(SEED_PROJECTS)}")
-    else:
-        print(f"[seed] проекты уже есть ({p_count}), пропуск")
+    for row in db.list_projects():
+        if row["slug"] not in seen:
+            db.delete_project(row["id"])
+    print(f"[seed] проекты синхронизированы: {len(SEED_PROJECTS)}")
 
     if b_count == 0:
         for post in SEED_POSTS:

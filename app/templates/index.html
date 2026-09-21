@@ -154,13 +154,18 @@
               <span class="status-dot"></span>
               <span class="status-text">Закрытый доступ · {{ p.year }}</span>
             </div>
+            {% elif p.slug in dev %}
+            <div class="project-status is-dev">
+              <span class="status-dot"></span>
+              <span class="status-text">В разработке · {{ p.year }}</span>
+            </div>
             {% else %}
             <div class="project-status">
               <span class="status-dot"></span>
               <span class="status-text">{% if 'сейчас' in p.year or '2026' in p.year %}Активен · {{ p.year }}{% else %}Внедрен · {{ p.year }}{% endif %}</span>
             </div>
             {% endif %}
-            {% if p.link and p.slug not in private %}
+            {% if p.link and p.slug not in private and p.slug not in dev %}
             <a class="project-go" href="{{ p.link }}" target="_blank" rel="noopener">Перейти ↗</a>
             {% endif %}
           </div>
