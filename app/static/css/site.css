@@ -1200,7 +1200,7 @@ body::after {
   color: var(--fg-faint); white-space: pre; pointer-events: none; overflow: hidden;
 }
 .term-ghost .typed { color: transparent; }
-.term-body .ln[data-cmd] { position: relative; padding-left: 1.2rem; }
+.term-body .ln[data-cmd] { position: relative; padding-left: 1.2rem; cursor: pointer; }
 .term-body .ln[data-cmd]::before {
   content: "▸"; position: absolute; left: 0; color: transparent;
 }

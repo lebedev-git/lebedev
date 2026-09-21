@@ -330,6 +330,9 @@ input.addEventListener('beforeinput', (e) => {
 input.addEventListener('input', () => { setGhost(); highlightRow(); });
 
 input.addEventListener('keydown', (e) => {
+  // Enter — сами, не полагаясь на неявную отправку формы: у формы нет кнопки,
+  // и часть браузеров и экранных клавиатур её не отправляют.
+  if (e.key === 'Enter') { e.preventDefault(); form.requestSubmit(); return; }
   if (e.key === 'Tab' || (e.key === 'ArrowRight' && input.selectionStart === input.value.length)) {
     const s = suggestion();
     if (s) { e.preventDefault(); input.value = s; setGhost(); }
@@ -353,6 +356,9 @@ term.closest('.hero-terminal').addEventListener('click', (e) => {
   if (e.target.closest('a, button')) return;
   if (String(getSelection())) return;
   input.focus({ preventScroll: true });
+  // Клик или тап по строке меню запускает команду: на телефоне так проще, чем печатать.
+  const row = e.target.closest('.ln[data-cmd]');
+  if (row && !busy) { input.value = row.dataset.cmd; prefilled = true; form.requestSubmit(); }
 });
 
 menu();
