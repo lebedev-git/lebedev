@@ -1,4 +1,6 @@
 """FastAPI-приложение: публичные страницы + лёгкая админка."""
+import hashlib
+import re
 from typing import Annotated
 
 from fastapi import FastAPI, Form, Request, UploadFile, File
@@ -18,7 +20,8 @@ from .auth import (
     register_login_result,
     require_admin,
 )
-from .config import DEV_PROJECTS, OWNER, PRIVATE_PROJECTS, SITE_URL, STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR
+from .config import (DEV_PROJECTS, OWNER, PRIVATE_PROJECTS, SECRET_KEY, SITE_URL,
+                     STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR)
 from .content import ABOUT, EXPERIENCE, SERVICES, SKILLS, STATS
 from .seed import run as run_seed
 from .utils import save_upload, unique_slug
@@ -44,12 +47,39 @@ def plural(n: int, one: str, few: str, many: str) -> str:
 templates.env.globals["plural"] = plural
 
 
+# Боты и мониторинги в счётчик не идут: иначе «посетители» — это краулеры.
+BOT_UA = re.compile(
+    r"bot|crawl|spider|slurp|yandex|google|bing|duckduck|facebook|telegram|whatsapp|"
+    r"curl|wget|python|java|go-http|headless|lighthouse|monitor|uptime|preview|scan",
+    re.I,
+)
+
+
+def visitor_id(request: Request) -> str:
+    """Отпечаток посетителя: соль приложения + IP + браузер. Сырой IP не сохраняем."""
+    fwd = request.headers.get("x-forwarded-for", "")
+    ip = fwd.split(",")[0].strip() or (request.client.host if request.client else "")
+    raw = f"{SECRET_KEY}|{ip}|{request.headers.get('user-agent', '')}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:20]
+
+
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     resp = await call_next(request)
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     resp.headers.setdefault("X-Frame-Options", "DENY")
     resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+
+    # Считаем только открытые страницы сайта: без админки, статики и ботов.
+    if (resp.status_code == 200
+            and request.method == "GET"
+            and not request.url.path.startswith(("/admin", "/static"))
+            and resp.headers.get("content-type", "").startswith("text/html")
+            and not BOT_UA.search(request.headers.get("user-agent", ""))):
+        try:
+            db.record_visit(visitor_id(request))
+        except Exception:  # счётчик никогда не роняет страницу
+            pass
     return resp
 
 
@@ -201,6 +231,7 @@ def admin_home(request: Request):
     return render(
         request, "admin/dashboard.html",
         projects=db.list_projects(), posts=db.list_posts(only_published=False),
+        visits=db.visit_stats(),
     )
 
 

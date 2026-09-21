@@ -7,6 +7,48 @@
     <a class="btn btn-ghost btn-sm" href="/admin/logout">Выйти</a>
   </div>
 
+  <!-- Посещаемость: свой счётчик, данные в базе сайта -->
+  <div class="admin-block">
+    <div class="admin-head">
+      <h2>Посещаемость</h2>
+      <span class="badge">{% if visits.since %}с {{ visits.since }}{% else %}пока пусто{% endif %}</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-num">{{ visits.today_people }}</span>
+        <span class="stat-cap">сегодня</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">{{ visits.yesterday_people }}</span>
+        <span class="stat-cap">вчера</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">{{ visits.week_people }}</span>
+        <span class="stat-cap">за 7 дней</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">{{ visits.total_people }}</span>
+        <span class="stat-cap">всего человек</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">{{ visits.total_hits }}</span>
+        <span class="stat-cap">всего просмотров</span>
+      </div>
+    </div>
+    {% if visits.days %}
+    <table class="admin-table">
+      <thead><tr><th>День</th><th>Человек</th><th>Просмотров</th></tr></thead>
+      <tbody>
+      {% for d in visits.days %}
+        <tr><td>{{ d.day }}</td><td>{{ d.people }}</td><td>{{ d.hits }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">Визитов пока нет. Счётчик пишет только людей: боты и краулеры не считаются.</p>
+    {% endif %}
+  </div>
+
   <!-- Проекты -->
   <div class="admin-block">
     <div class="admin-head">
