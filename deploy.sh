@@ -53,6 +53,6 @@ if ! ssh -o BatchMode=yes $H "[ -f /etc/nginx/sites-enabled/rsk.a-lebedev.ru ]";
 fi
 
 echo "5/5 проверка снаружи"
-curl -s -o /dev/null -w "   https://a-lebedev.ru: %{http_code} (ждём 200)\n" https://a-lebedev.ru/
+curl -s -o /dev/null -w "   https://www.a-lebedev.ru: %{http_code} (ждём 200)\n" https://www.a-lebedev.ru/
 curl -s -o /dev/null -w "   https://rsk.a-lebedev.ru: %{http_code} (ждём 200 или 302 на вход)\n" https://rsk.a-lebedev.ru/
 echo "готово."
