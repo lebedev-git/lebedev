@@ -78,6 +78,13 @@ def robots(request: Request):
     )
 
 
+@app.get("/sw.js", include_in_schema=False)
+def sw():
+    # Старый service worker «Дорожной карты» ищет обновление здесь — см. static/sw.js.
+    return FileResponse(STATIC_DIR / "sw.js", media_type="application/javascript",
+                        headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/sitemap.xml", include_in_schema=False)
 def sitemap(request: Request):
     base = site_url(request)
