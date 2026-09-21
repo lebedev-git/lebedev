@@ -73,17 +73,18 @@ def x7(page):
     боковому меню внутри SPA, без перезагрузки страницы: иначе между экранами
     мелькает скелетон загрузки."""
     page.wait_for_timeout(5500)                      # загрузка данных остаётся за кадром
-    page.mouse.wheel(0, 300); page.wait_for_timeout(1200)
+    page.wait_for_timeout(1000)                      # дашборд: коротко, иначе кажется, что ролик стоит
     for label in X7_TABS:
         item = page.get_by_role("link", name=label, exact=True)
         if not item.count():
             continue
         item.first.click()
         page.wait_for_timeout(900)
-        page.mouse.wheel(0, 350); page.wait_for_timeout(1500)
+        page.mouse.wheel(0, 350); page.wait_for_timeout(1400)
+    page.wait_for_timeout(600)
 
 
-X7_TABS = ["Аналитика", "Сделки"]  # дашборд уже на экране; выплаты — таблица, скучно
+X7_TABS = ["Аналитика", "Выплаты", "Сделки"]
 
 
 def mayak_oko(page):
@@ -127,7 +128,7 @@ def zvezda(page):
 
 # Ключ — slug проекта в базе: по нему карточка находит cover-<slug>.mp4.
 SCENARIOS = {"mayak": mayak_oko, "mayak-3d": mayak, "english-path": eng, "x7-invest": x7, "zvezda": zvezda}
-KEEP = {"mayak": 12.0, "mayak-3d": 17.0, "english-path": 13.0, "x7-invest": 13.0, "zvezda": 14.0}  # сколько последних секунд прогона взять
+KEEP = {"mayak": 12.0, "mayak-3d": 17.0, "english-path": 13.0, "x7-invest": 8.5, "zvezda": 14.0}  # сколько последних секунд прогона взять
 # Ускорение на сборке: живой темп интерфейса для обложки слишком вялый.
 SPEED = {"mayak": 1.4, "mayak-3d": 1.8, "english-path": 1.4, "x7-invest": 1.4, "zvezda": 1.5}
 

@@ -81,9 +81,9 @@ function overlay(tag = 'div', cls = '') {
   return el;
 }
 
-/** Дождь из символов на весь экран; страница за ним темнеет и возвращается. */
+/** Дождь из символов на весь экран — за содержимым страницы, ничего не перекрывает. */
 async function rainScreen(ms = 3200) {
-  const cv = overlay('canvas');
+  const cv = overlay('canvas', 'term-fx-rain');
   const ctx = cv.getContext('2d');
   const dpr = devicePixelRatio || 1;
   cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
@@ -94,8 +94,11 @@ async function rainScreen(ms = 3200) {
   const t0 = performance.now();
   await new Promise((done) => {
     const tick = (now) => {
-      ctx.fillStyle = 'rgba(5, 8, 12, 0.14)';
+      // Хвосты гаснут в прозрачность, а не в чёрный: фон страницы остаётся виден.
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.14)';
       ctx.fillRect(0, 0, innerWidth, innerHeight);
+      ctx.globalCompositeOperation = 'source-over';
       ctx.fillStyle = '#59D6C0';
       drops.forEach((y, i) => {
         ctx.fillText(chars[Math.random() * chars.length | 0], i * size, y * size);
@@ -105,7 +108,7 @@ async function rainScreen(ms = 3200) {
     };
     requestAnimationFrame(tick);
   });
-  await cv.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, fill: 'forwards' }).finished;
+  await cv.animate({ opacity: 0 }, { duration: 700, fill: 'forwards' }).finished;
   cv.remove();
 }
 
