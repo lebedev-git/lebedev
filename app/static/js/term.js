@@ -72,6 +72,87 @@ function menu() {
   highlightRow();
 }
 
+// ── Эффекты за пределами окна ────────────────────────────────────────────────
+// Терминал управляет страницей: слой поверх всего, сам себя убирает.
+function overlay(tag = 'div', cls = '') {
+  const el = document.createElement(tag);
+  el.className = `term-fx ${cls}`.trim();
+  document.body.append(el);
+  return el;
+}
+
+/** Дождь из символов на весь экран; страница за ним темнеет и возвращается. */
+async function rainScreen(ms = 3200) {
+  const cv = overlay('canvas');
+  const ctx = cv.getContext('2d');
+  const dpr = devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const size = 16, chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789';
+  const drops = Array.from({ length: Math.ceil(innerWidth / size) }, () => Math.random() * -40);
+  ctx.font = `${size}px ${getComputedStyle(term).fontFamily}`;
+  const t0 = performance.now();
+  await new Promise((done) => {
+    const tick = (now) => {
+      ctx.fillStyle = 'rgba(5, 8, 12, 0.14)';
+      ctx.fillRect(0, 0, innerWidth, innerHeight);
+      ctx.fillStyle = '#59D6C0';
+      drops.forEach((y, i) => {
+        ctx.fillText(chars[Math.random() * chars.length | 0], i * size, y * size);
+        drops[i] = y * size > innerHeight && Math.random() > 0.97 ? 0 : y + 0.6;
+      });
+      if (now - t0 < ms) requestAnimationFrame(tick); else done();
+    };
+    requestAnimationFrame(tick);
+  });
+  await cv.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, fill: 'forwards' }).finished;
+  cv.remove();
+}
+
+/** Поезд проезжает по низу экрана справа налево. */
+async function trainScreen(rows) {
+  const el = overlay('pre', 'term-fx-train');
+  el.textContent = rows.join('\n');
+  const w = el.getBoundingClientRect().width;
+  await el.animate(
+    [{ transform: `translateX(${innerWidth}px)` }, { transform: `translateX(${-w - 40}px)` }],
+    { duration: Math.max(2800, innerWidth * 2.4), easing: 'linear' },
+  ).finished;
+  el.remove();
+}
+
+/** Слово «рутину» в подзаголовке: обернуть, чтобы зачеркнуть и стереть. */
+function routineWord() {
+  const lead = document.querySelector('.hero-copy .lead');
+  const old = lead && lead.querySelector('.erased');
+  if (old) return old;
+  const node = lead && [...lead.childNodes].find((n) => n.nodeType === 3 && n.data.includes('рутину'));
+  if (!node) return null;
+  const mid = node.splitText(node.data.indexOf('рутину'));
+  mid.splitText(6);
+  const span = document.createElement('span');
+  span.className = 'erased';
+  span.textContent = mid.data;
+  mid.replaceWith(span);
+  return span;
+}
+
+/** Всё на странице падает вниз, через паузу возвращается на места. */
+async function collapseScreen() {
+  const els = [...document.querySelectorAll(
+    '.hero-title, .hero-copy .lead, .tech-card, .project-card, .skill-card, .sec-title, .biz-card',
+  )];
+  const anims = els.map((el) => el.animate(
+    [{ transform: 'none' }, { transform: `translate(${(Math.random() - 0.5) * 200}px, 110vh) rotate(${(Math.random() - 0.5) * 60}deg)` }],
+    { duration: 900 + Math.random() * 500, delay: Math.random() * 600, easing: 'cubic-bezier(.55, 0, 1, .45)', fill: 'forwards' },
+  ));
+  await Promise.all(anims.map((a) => a.finished));
+  await sleep(1400);
+  anims.forEach((a) => { a.reverse(); });
+  await Promise.all(anims.map((a) => a.finished));
+  anims.forEach((a) => a.cancel());
+}
+
 // ── Команды ──────────────────────────────────────────────────────────────────
 const CMDS = {
   async sl() {
@@ -82,21 +163,14 @@ const CMDS = {
       '  |_/  \\/  \\/  \\_|',
       '     o  o  o  o   ',
     ];
-    const smoke = ['~  ', ' ~ ', '  ~'];
-    const w = cols();
-    const el = line('', 'tg');
-    el.style.whiteSpace = 'pre';
-    const frame = (pad, i) => {
-      const puff = smoke[i % 3];
-      const rows = [' '.repeat(6) + puff, ...train];
-      return rows.map((r) => (pad >= 0 ? ' '.repeat(pad) + r : r.slice(-pad))).join('\n');
-    };
-    if (REDUCED) { el.textContent = frame(Math.floor(w / 3), 0); return; }
-    for (let pad = w, i = 0; pad > -train[1].length; pad -= 2, i++) {
-      el.textContent = frame(pad, i);
-      await sleep(55);
+    if (REDUCED) {
+      const el = line('', 'tg');
+      el.style.whiteSpace = 'pre';
+      el.textContent = train.join('\n');
+    } else {
+      line('чух-чух… смотри вниз.', 'tg');
+      await trainScreen(['      ~  ~', ...train]);
     }
-    drop(el);
     line('поезд ушёл. рутина осталась на перроне.', 'dim');
   },
 
@@ -106,12 +180,14 @@ const CMDS = {
     const rnd = () => Array.from({ length: w }, () => (Math.random() < 0.35 ? chars[Math.random() * chars.length | 0] : ' ')).join('');
     const el = line('', 'ok');
     el.style.whiteSpace = 'pre';
-    const frames = REDUCED ? 1 : 36;
-    for (let i = 0; i < frames; i++) {
+    if (REDUCED) {
       el.textContent = Array.from({ length: rows }, rnd).join('\n');
-      await sleep(70);
+    } else {
+      // дождь начинается в окне и через полсекунды выходит на весь экран
+      const inWindow = (async () => { for (let i = 0; i < 8; i++) { el.textContent = Array.from({ length: rows }, rnd).join('\n'); await sleep(70); } })();
+      await Promise.all([inWindow, rainScreen()]);
+      drop(el);
     }
-    if (!REDUCED) drop(el);
     line('wake up. ты уже в матрице.', 'ok');
   },
 
@@ -131,25 +207,42 @@ const CMDS = {
     line('перерыв 5 минут. агенты работают без тебя.', 'dim');
   },
 
-  async rm() {
+  async rm(cmd) {
+    if (/\s\/$/.test(cmd)) {
+      line('rm: cannot remove \'/\': permission denied', 'n8n');
+      line('попробуй sudo.', 'dim');
+      return;
+    }
     const items = ['отчёты руками', 'копипаст из почты в CRM', 'расшифровка созвонов', 'напоминания клиентам'];
-    for (const it of items) {
+    const word = REDUCED ? null : routineWord();   // слово в подзаголовке зачёркивается вместе с прогрессом
+    word?.classList.remove('gone');
+    for (const [n, it] of items.entries()) {
       const el = line('', 'n8n');
       const steps = REDUCED ? 1 : 12;
       for (let i = 1; i <= steps; i++) {
         const done = Math.round((i / steps) * 18);
         el.textContent = `удаляю: ${it.padEnd(26)} ${'█'.repeat(done)}${'░'.repeat(18 - done)} ${Math.round((i / steps) * 100)}%`;
+        word?.style.setProperty('--w', (n + i / steps) / items.length);
         await sleep(45);
       }
     }
+    word?.classList.add('gone');
     line('✓ рутина удалена · освобождено 37 ч/нед');
     link('написать в Telegram', TG, '[agent] хочешь так же? → ');
+    line('а если совсем всё? sudo rm -rf /', 'dim');
+    if (word) setTimeout(() => { word.classList.remove('gone'); word.style.removeProperty('--w'); }, 6000);
   },
 
-  async sudo() {
+  async sudo(cmd) {
     const el = line('[sudo] password for guest: ', 'dim');
     for (let i = 0; i < 8; i++) { el.textContent += '•'; await sleep(REDUCED ? 0 : 60); }
     await sleep(400);
+    if (/\brm\b/.test(cmd)) {
+      line('permission granted. удаляю /…', 'n8n');
+      if (!REDUCED) await collapseScreen();
+      line('✓ восстановлено из бэкапа. бэкапы — это важно.');
+      return;
+    }
     line('permission granted.', 'ok');
     link(TG.replace(/^https?:\/\//, ''), TG, '→ ');
   },
