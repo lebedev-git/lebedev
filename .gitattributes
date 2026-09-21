@@ -1,0 +1,3 @@
+# Файлы для сервера всегда с LF: bash и systemd не понимают CRLF из Windows-копии.
+*.sh text eol=lf
+deploy/** text eol=lf
