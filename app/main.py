@@ -20,8 +20,8 @@ from .auth import (
     register_login_result,
     require_admin,
 )
-from .config import (DEV_PROJECTS, OWNER, PRIVATE_PROJECTS, SECRET_KEY, SITE_URL,
-                     STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR)
+from .config import (DEV_PROJECTS, METRIKA_ID, OWNER, PRIVATE_PROJECTS, SECRET_KEY,
+                     SITE_URL, STATIC_DIR, TEMPLATES_DIR, UPLOADS_DIR)
 from .content import ABOUT, EXPERIENCE, SERVICES, SKILLS, STATS
 from .seed import run as run_seed
 from .utils import save_upload, unique_slug
@@ -32,6 +32,7 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 templates.env.globals["owner"] = OWNER
 templates.env.globals["cover_svg"] = cover_svg
 templates.env.globals["icon_svg"] = get_icon_svg
+templates.env.globals["metrika_id"] = METRIKA_ID
 templates.env.globals["asset_v"] = str(int(__import__("time").time()))  # сброс кэша статики на каждый запуск
 
 

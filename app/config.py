@@ -17,6 +17,10 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 SECRET_KEY = os.getenv("SECRET_KEY", "")
 # Абсолютный адрес сайта для og:image и sitemap. Пусто — берётся из запроса.
 SITE_URL = os.getenv("SITE_URL", "").rstrip("/")
+# Номер счётчика Яндекс Метрики. Пусто — счётчик не подключается (локально и в тестах).
+# Только цифры: значение подставляется в JS, мусор из окружения туда попасть не должен.
+_metrika = os.getenv("METRIKA_ID", "").strip()
+METRIKA_ID = _metrika if _metrika.isdigit() else ""
 
 # Fail-fast: не стартуем с пустыми/дефолтными секретами.
 # Для осознанного локального запуска без .env — ALLOW_INSECURE=1.
