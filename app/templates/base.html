@@ -69,14 +69,16 @@
 </footer>
 
 {% if metrika_id %}
-<!-- Яндекс Метрика: номер счётчика живёт в .env (METRIKA_ID), в коде его нет -->
+<!-- Яндекс Метрика: номер счётчика живёт в .env (METRIKA_ID), в коде его нет.
+     Код сверен с официальным из интерфейса Метрики: при ssr:true скрипт обязан
+     грузиться как tag.js?id=<номер>, иначе очередь ym не запускается и визиты не пишутся. -->
 <script>
    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
    m[i].l=1*new Date();
    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-   ym({{ metrika_id }}, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id={{ metrika_id }}", "ym");
+   ym({{ metrika_id }}, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/{{ metrika_id }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 {% endif %}
