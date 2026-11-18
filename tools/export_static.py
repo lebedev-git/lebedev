@@ -59,7 +59,7 @@ if OUT.exists():
 OUT.mkdir(parents=True)
 db.init_db()
 run_seed()
-pages = ["/", "/about", "/experience", "/blog"] + [f"/blog/{p['slug']}" for p in db.list_posts() if p["published"]]
+pages = ["/", "/predel", "/about", "/experience", "/blog"] + [f"/blog/{p['slug']}" for p in db.list_posts() if p["published"]]
 for path in pages:
     r = get(path)
     assert r.status_code == 200, (path, r.status_code)

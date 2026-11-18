@@ -20,7 +20,7 @@ SEED_PROJECTS = [
         "tags": "AI-продукты, данные, урбанистика",
         "role": "Автор проекта",
         "year": "2026",
-        "link": "/#achievements",
+        "link": "/predel",
         "featured": 1,
         "sort_order": 0,
     },

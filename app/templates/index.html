@@ -151,7 +151,7 @@
             </div>
             {% endif %}
             {% if p.link and p.slug not in private and p.slug not in dev %}
-            <a class="project-go" href="{{ p.link }}" target="_blank" rel="noopener">Перейти ↗</a>
+            {% if p.link.startswith('/') %}<a class="project-go" href="{{ p.link }}">Подробнее →</a>{% else %}<a class="project-go" href="{{ p.link }}" target="_blank" rel="noopener">Перейти ↗</a>{% endif %}
             {% endif %}
           </div>
         </div>
@@ -238,9 +238,13 @@
         <div class="ach-imgs"><a href="/static/docs/it-park-blagodarnost-2026.pdf" target="_blank" rel="noopener"><img src="/static/docs/it-park-blagodarnost-2026.jpg" alt="Благодарственное письмо ИТ-парка" loading="lazy" /></a></div>
       </article>
       <article class="skill-card skill-card-wide rise">
-        <span class="skill-no">2022-2027</span>
-        <h3>Образование</h3>
-        <p>Московский университет имени А.С. Грибоедова: бакалавриат, направление 42.03.02 "Журналистика", профиль "Конвергентная журналистика", 5 курс, заочная форма.</p>
+        <span class="skill-no">Опыт и образование</span>
+        <ul class="ach-timeline">
+          <li><span class="t-when">2026 - сейчас</span><span class="t-what"><b>Разработчик</b>, ООО "НейроКонтур", резидент ИТ-парка. Программно-аппаратный комплекс МАЯК: платформа, аналитика, ИИ-модуль.</span></li>
+          <li><span class="t-when">2025 - сейчас</span><span class="t-what"><b>Разработчик цифровых продуктов, советник председателя</b>, Российское Содружество Колледжей. Тренажёр МАЯК, автоматизация на n8n, Telegram-боты, LLM, со-тренер по работе с ИИ.</span></li>
+          <li><span class="t-when">2023 - 2025</span><span class="t-what"><b>Ведущий специалист Дирекции вузов и СПО</b>, Движение Первых. Цифровая платформа команда-первых.рф: ТЗ, приёмка, геймификация, внедрение ИИ в работу команды.</span></li>
+          <li><span class="t-when">2022 - 2027</span><span class="t-what"><b>Бакалавриат</b>, Московский университет имени А.С. Грибоедова: 42.03.02 "Журналистика", профиль "Конвергентная журналистика", 5 курс, заочно.</span></li>
+        </ul>
       </article>
     </div>
   </section>

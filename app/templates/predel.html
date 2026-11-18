@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set active = 'home' %}
+{% block title %}ПРЕДЕЛ: места в школах для новых ЖК · {{ owner.name }}{% endblock %}
+
+{% block content %}
+<div class="wrap">
+  <section class="skills-section predel-page">
+    <div class="skills-head rise">
+      <h2 class="sec-title">// ПРЕДЕЛ</h2>
+    </div>
+    <h1 class="predel-title rise">Хватит ли мест в школе, если рядом построят новый дом</h1>
+    <p class="predel-lead rise">Сервис с картой Казани: для участка нового жилого комплекса показывает ближайшие школы, их загрузку по годам с учётом соседних строек и вердикт, хватит ли мест. Главное число считается по действующему нормативу, у каждого числа источник и дата.</p>
+    <figure class="predel-fig rise">
+      <img src="/static/docs/predel-screen.jpg" alt="Экран прототипа ПРЕДЕЛ: Приволжский район Казани, расчёт на 2028 год" />
+      <figcaption>Экран прототипа: Приволжский район Казани, расчёт на 2028 год для дома на 509 квартир у лицея № 133.</figcaption>
+    </figure>
+
+    <div class="skills-grid predel-grid">
+      <article class="skill-card rise">
+        <span class="skill-no">01</span>
+        <h3>Проблема</h3>
+        <p>Жильё строят быстрее, чем школы. Норматив считает места для каждого ЖК отдельно и не видит, что школа рядом уже заполнена. Гимназия № 107 открылась в 2023 году на 1 224 места, в 2026 году в ней учатся 2 260 детей.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">02</span>
+        <h3>Решение</h3>
+        <p>Четыре шага на открытых данных: школа сегодня, прогноз без нового дома по возрастам детей района, места для ЖК по нормативу, баланс мест по годам. Застройщик и город видят нехватку или запас мест на стадии концепции.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">03</span>
+        <h3>Проверка</h3>
+        <p>Медианная ошибка прогноза по школе 5,8% на год и 8,9% на два года (история Казани 2018-2026). Закрепление домов сверено с постановлением исполкома, 84 автоматические проверки расчёта.</p>
+      </article>
+    </div>
+
+    <figure class="predel-fig predel-fig-light rise">
+      <img src="/static/docs/predel-method.jpg" alt="Схема расчёта ПРЕДЕЛ: четыре шага и источники данных" />
+      <figcaption>Схема расчёта: четыре шага и источники данных.</figcaption>
+    </figure>
+
+    <div class="skills-grid predel-grid">
+      <article class="skill-card skill-card-wide rise">
+        <span class="skill-no">2026</span>
+        <h3>Хакатон и акселератор</h3>
+        <p>Топ-15 хакатона "Школа цифровых чемпионов 2026" (Татарстан) по задаче "Предиктивная оценка влияния жилой застройки", основная программа акселератора и Демо-день 13.11.2026.</p>
+        <div class="ach-imgs">
+          <a href="/static/docs/shcch-akselerator-2026.pdf" target="_blank" rel="noopener"><img src="/static/docs/shcch-akselerator-2026.jpg" alt="Сертификат участника акселерационной программы" loading="lazy" /></a>
+          <a href="/static/docs/shcch-demo-day-2026.pdf" target="_blank" rel="noopener"><img src="/static/docs/shcch-demo-day-2026.jpg" alt="Сертификат участника Демо-дня" loading="lazy" /></a>
+        </div>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">Роль</span>
+        <h3>Автор проекта</h3>
+        <p>Сбор и проверка данных, методика, расчёт, веб-интерфейс, презентация. Данные: Татарстанстат, edu.tatar.ru, bus.gov.ru, реестры Рособрнадзора и Госстройнадзора, OpenStreetMap.</p>
+      </article>
+    </div>
+    <p class="predel-back rise"><a href="/#projects">← Все проекты</a></p>
+  </section>
+</div>
+{% endblock %}

@@ -1261,3 +1261,20 @@ body::after {
 .project-status.is-dev .status-dot { background: #FBBF24; box-shadow: 0 0 8px #FBBF24; }
 .project-status.is-dev .status-dot::after { border-color: #FBBF24; }
 .project-status.is-dev .status-text { color: #FCD34D; }
+
+/* Достижения: опыт и образование; страница ПРЕДЕЛ */
+.ach-timeline { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 1rem; }
+.ach-timeline li { display: grid; grid-template-columns: 9rem 1fr; gap: 1rem; color: var(--fg-muted); font-size: var(--body-sm); line-height: 1.55; }
+.ach-timeline .t-when { font-family: var(--font-mono); color: rgb(var(--signal)); }
+.ach-timeline b { color: #FFFFFF; font-weight: 600; }
+@media (max-width: 36rem) { .ach-timeline li { grid-template-columns: 1fr; gap: 0.2rem; } }
+.predel-page { padding-top: calc(var(--space-lg) + 3rem); }
+.predel-title { font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.15; color: #FFFFFF; margin: 1rem 0; max-width: 50rem; }
+.predel-lead { color: var(--fg-muted); max-width: 50rem; line-height: 1.6; margin: 0 0 2rem; }
+.predel-fig { margin: 0 0 2rem; }
+.predel-fig img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); }
+.predel-fig-light img { background: #FFFFFF; padding: 1rem; }
+.predel-fig figcaption { color: var(--fg-faint); font-size: 0.85rem; margin-top: 0.6rem; }
+.predel-grid { margin-bottom: 2rem; }
+.predel-back a { color: rgb(var(--signal)); font-family: var(--font-mono); text-decoration: none; }
+.predel-fig-light { max-width: 60rem; margin-inline: auto; }

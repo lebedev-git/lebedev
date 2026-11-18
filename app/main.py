@@ -134,6 +134,11 @@ def projects(request: Request):
     return RedirectResponse("/", status_code=303)
 
 
+@app.get("/predel", response_class=HTMLResponse)
+def predel(request: Request):
+    return render(request, "predel.html")
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
     return render(request, "about.html", about=ABOUT)
