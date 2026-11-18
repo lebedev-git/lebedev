@@ -1171,6 +1171,10 @@ body::after {
 .ach-docs { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin-top: 1rem !important; }
 .ach-docs a { color: rgb(var(--signal)); font-family: var(--font-mono); font-size: 0.9rem; text-decoration: none; }
 .ach-docs a:hover { text-decoration: underline; }
+.ach-imgs { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
+.ach-imgs a { flex: 1; display: block; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+.ach-imgs img { display: block; width: 100%; height: auto; transition: transform 0.25s ease; }
+.ach-imgs a:hover img { transform: scale(1.02); }
 #achievements .skill-card h3 { margin-top: 1.2rem; }
 .skill-art {
   position: absolute; right: 2rem; top: 50%; width: 180px; height: 180px;
