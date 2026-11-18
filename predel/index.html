@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ПРЕДЕЛ: места в школах для новых ЖК · Андрей Лебедев</title>
+<meta name="description" content="Андрей Лебедев — AI Automation Engineer. Превращаю рутину и сложные данные в автономные системы без участия человека." />
+<meta name="theme-color" content="#07090E" />
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="/lebedev/static/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/lebedev/favicon.ico" />
+
+<!-- OpenGraph / Telegram Preview -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Андрей Лебедев" />
+<meta property="og:title" content="Андрей Лебедев — AI Automation & Digital Systems" />
+<meta property="og:description" content="Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ. Команда резидента ИТ-парка." />
+<meta property="og:url" content="https://lebedev-git.github.io/lebedev/predel" />
+<link rel="canonical" href="https://lebedev-git.github.io/lebedev/predel" />
+<meta property="og:image" content="https://lebedev-git.github.io/lebedev/static/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Андрей Лебедев — AI Automation & Digital Systems" />
+<meta name="twitter:description" content="Проектирую и запускаю автономные AI-системы, интеграции на n8n и платформы под ключ." />
+<meta name="twitter:image" content="https://lebedev-git.github.io/lebedev/static/og-image.png" />
+
+<!-- Класс ставится до отрисовки: иначе анимируемые блоки успевают моргнуть
+     конечным состоянием, прежде чем скрипт их спрячет. -->
+<script>document.documentElement.classList.replace("no-js", "js")</script>
+<link rel="stylesheet" href="/lebedev/static/css/fonts.css?v=1794989713" />
+<link rel="stylesheet" href="/lebedev/static/css/core.css?v=1794989713" />
+<link rel="stylesheet" href="/lebedev/static/css/site.css?v=1794989713" />
+</head>
+<body>
+<div class="bg-blueprint-grid" aria-hidden="true"></div>
+<div id="toast-notify" class="toast-popup" aria-live="polite"></div>
+
+<nav class="top">
+  <div class="wrap nav-inner">
+    <a href="/lebedev/" class="brand"><span class="brand-name">Андрей Лебедев</span></a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="nav-links">Меню</button>
+    <div class="links" id="nav-links">
+      <a href="/lebedev/#skills">Навыки</a>
+      <a href="/lebedev/#projects">Проекты</a>
+      <a href="/lebedev/#achievements">Достижения</a>
+      <a href="/lebedev/#contact">Контакты</a>
+      <a href="https://t.me/lebedev_core" class="hire" target="_blank" rel="noopener">Написать в Telegram ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  
+<div class="wrap">
+  <section class="skills-section predel-page">
+    <div class="skills-head rise">
+      <h2 class="sec-title">// ПРЕДЕЛ</h2>
+    </div>
+    <h1 class="predel-title rise">Хватит ли мест в школе, если рядом построят новый дом</h1>
+    <p class="predel-lead rise">Сервис с картой Казани: для участка нового жилого комплекса показывает ближайшие школы, их загрузку по годам с учётом соседних строек и вердикт, хватит ли мест. Главное число считается по действующему нормативу, у каждого числа источник и дата.</p>
+    <figure class="predel-fig rise">
+      <img src="/lebedev/static/docs/predel-screen.jpg" alt="Экран прототипа ПРЕДЕЛ: Приволжский район Казани, расчёт на 2028 год" />
+      <figcaption>Экран прототипа: Приволжский район Казани, расчёт на 2028 год для дома на 509 квартир у лицея № 133.</figcaption>
+    </figure>
+
+    <div class="skills-grid predel-grid">
+      <article class="skill-card rise">
+        <span class="skill-no">01</span>
+        <h3>Проблема</h3>
+        <p>Жильё строят быстрее, чем школы. Норматив считает места для каждого ЖК отдельно и не видит, что школа рядом уже заполнена. Гимназия № 107 открылась в 2023 году на 1 224 места, в 2026 году в ней учатся 2 260 детей.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">02</span>
+        <h3>Решение</h3>
+        <p>Четыре шага на открытых данных: школа сегодня, прогноз без нового дома по возрастам детей района, места для ЖК по нормативу, баланс мест по годам. Застройщик и город видят нехватку или запас мест на стадии концепции.</p>
+      </article>
+      <article class="skill-card rise">
+        <span class="skill-no">03</span>
+        <h3>Проверка</h3>
+        <p>Медианная ошибка прогноза по школе 5,8% на год и 8,9% на два года (история Казани 2018-2026). Закрепление домов сверено с постановлением исполкома, 84 автоматические проверки расчёта.</p>
+      </article>
+    </div>
+
+    <div class="skills-grid predel-grid">
+      <article class="skill-card skill-card-full rise">
+        <span class="skill-no">2026</span>
+        <h3>Хакатон и акселератор</h3>
+        <p>Топ-15 хакатона "Школа цифровых чемпионов 2026" (Татарстан) по задаче "Предиктивная оценка влияния жилой застройки", основная программа акселератора и Демо-день 13.11.2026.</p>
+        <div class="ach-imgs">
+          <a href="/lebedev/static/docs/shcch-akselerator-2026.pdf" target="_blank" rel="noopener"><img src="/lebedev/static/docs/shcch-akselerator-2026.jpg" alt="Сертификат участника акселерационной программы" loading="lazy" /></a>
+          <a href="/lebedev/static/docs/shcch-demo-day-2026.pdf" target="_blank" rel="noopener"><img src="/lebedev/static/docs/shcch-demo-day-2026.jpg" alt="Сертификат участника Демо-дня" loading="lazy" /></a>
+        </div>
+      </article>
+    </div>
+    <p class="predel-back rise"><a href="/lebedev/#projects">← Все проекты</a></p>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <span>© 2026 Андрей Лебедев · Москва</span>
+      <span>
+        <a href="https://t.me/lebedev_core" target="_blank" rel="noopener">Telegram</a> ·
+        <a href="tel:+79508163941">+7 950 816-39-41</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+
+
+<script type="module" src="/lebedev/static/js/motion.js?v=1794989713"></script>
+<script type="module" src="/lebedev/static/js/filter.js?v=1794989713"></script>
+</body>
+</html>
