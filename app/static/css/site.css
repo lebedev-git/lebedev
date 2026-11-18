@@ -1278,3 +1278,13 @@ body::after {
 .predel-grid { margin-bottom: 2rem; }
 .predel-back a { color: rgb(var(--signal)); font-family: var(--font-mono); text-decoration: none; }
 .predel-fig-light { max-width: 60rem; margin-inline: auto; }
+.skill-card-full { grid-column: 1 / -1; }
+.tl { list-style: none; margin: 1.4rem 0 0; padding: 0 0 0 1.6rem; position: relative; display: grid; gap: 1.3rem; }
+.tl::before { content: ""; position: absolute; left: 0.35rem; top: 0.4rem; bottom: 0.4rem; width: 2px; background: linear-gradient(rgb(var(--signal)), rgb(var(--signal) / 0.1)); }
+.tl-item { position: relative; }
+.tl-item::before { content: ""; position: absolute; left: -1.6rem; top: 0.25rem; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: #0B0F14; border: 2px solid rgb(var(--signal)); box-shadow: 0 0 10px rgb(var(--signal) / 0.6); }
+.tl-item.tl-edu::before { background: rgb(var(--signal)); }
+.tl-when { display: inline-block; font-family: var(--font-mono); font-size: 0.78rem; color: rgb(var(--signal)); background: rgb(var(--signal) / 0.1); border: 1px solid rgb(var(--signal) / 0.3); border-radius: 999px; padding: 0.1rem 0.6rem; }
+.tl-role { margin: 0.45rem 0 0.1rem; font-size: 1.02rem; font-weight: 700; color: #FFFFFF; }
+.tl-org { display: block; font-size: 0.9rem; color: #FFFFFF; opacity: 0.75; }
+.tl-text { margin: 0.25rem 0 0 !important; font-size: 0.88rem !important; }
